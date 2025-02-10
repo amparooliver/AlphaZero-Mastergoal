@@ -1,0 +1,126 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    background-color: #F6FCDF;
+    color: #333;
+}
+
+h1 {
+    color: #1D350F;
+    font-size: 2em;
+}
+
+.container {
+    padding: 25px;
+    text-align: center;
+}
+
+#marcador, #turno {
+    margin: 10px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+#tablero {
+    display: grid;
+    grid-template-columns: repeat(11, 40px);
+    grid-gap: px;
+    background-color: #9CCC65;
+    padding: 10px;
+    width: fit-content;
+    margin: 0 auto;
+    border-radius: 5px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.219);
+}
+
+.casilla {
+    width: 40px;
+    height: 40px;
+    background-color: #8BC34A;
+    border: 1px solid #4CAF50;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    position: relative;
+}
+
+.casilla.negro {
+    background-color: #9CCC65;
+    border: 1px solid #9CCC65;
+    cursor: default;
+}
+.casilla:not(.negro):hover {
+    background-color: #F6FCDF;
+}
+.casilla.arco {
+    background-color: #F6FCDF;
+}
+
+.casilla.area-chica {
+    background-color: #BFEA7C;
+}
+
+.casilla.area-grande {
+    background-color: #9BCF53;
+}
+
+.casilla.corner {
+    background-color: #8BC34A;
+}
+
+.casilla .yellow-dot {
+    width: 10px;
+    height: 10px;
+    background-color: yellow;
+    border-radius: 50%;
+    margin: 0 auto;
+}
+
+.jugador-rojo {
+    background-color: red;
+    width: 80%;
+    height: 80%;
+    border-radius: 50%;
+}
+
+.jugador-blanco {
+    background-color: white;
+    border: 2px solid #ccc;
+    width: 80%;
+    height: 80%;
+    border-radius: 50%;
+}
+
+.pelota {
+    background-color: black;
+    width: 60%;
+    height: 60%;
+    border-radius: 50%;
+}
+
+.jugador-rojo:hover, .jugador-blanco:hover, .pelota:hover {
+    transform: scale(1.1);
+}
+
+.yellow-dot::after {
+    content: '';
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    background-color: #FFF67E;
+    border: 1px solid #EADA00;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.glow {
+    box-shadow: 0 0 10px 5px rgba(255, 255, 0, 0.8); /* Yellow glow */
+    border-radius: 50%; /* Optional, for circular appearance */
+    transition: box-shadow 0.3s ease-in-out; /* Smooth transition */
+}

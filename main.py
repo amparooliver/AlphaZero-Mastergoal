@@ -36,7 +36,7 @@ args = dotdict({
     'arenaCompare': 40,         # Number of games to play during arena play to determine if new net will be accepted.
     'cpuct': 1,
 
-    'checkpoint': './09_02_25/',
+    'checkpoint': './colab/',
     'load_model': False,
     'load_folder_file': ('./05_02_25','checkpoint_1.pth.tar'),
     'starting_iteration': 1,    # Set to higher than 1 if resuming from a checkpoint

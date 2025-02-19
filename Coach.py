@@ -58,7 +58,7 @@ class Coach():
 
             if self.args.verbose:
                 canonicalBoard.display()
-            if episodeStep % 20 == 0:
+            if episodeStep % 10 == 0:
                 log.info(f"Turn #{episodeStep}")
 
             temp = int(episodeStep < self.args.tempThreshold)

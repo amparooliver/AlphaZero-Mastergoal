@@ -1,4 +1,4 @@
-# Colab Training: python main.py --use_drive_backup --drive_backup_path='/content/drive/MyDrive/your_project_folder/backups'
+# Colab Training: python main.py --use_drive_backup --drive_backup_path='/content/drive/My Drive/BACKUP_FOLDER'
 
 # MasterGoal AlphaZero Implementation
 

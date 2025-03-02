@@ -45,23 +45,23 @@ args = dotdict({
 
     # New parameters for Google Drive backup
     'use_drive_backup': True,   # Enable backup to Google Drive
-    'drive_backup_path': '/content/drive/MyDrive/alpha_zero_backups'  # Path in Google Drive to save backups
+    'drive_backup_path': '/content/drive/My Drive/BACKUP_FOLDER'  # Path in Google Drive to save backups
 })
 
 def main():
     # Google Drive mounting code
     try:
-        from google.colab import drive
-        log.info('Running in Colab environment. Mounting Google Drive...')
-        drive.mount('/content/drive')
-        log.info('Google Drive mounted successfully.')
-    except ImportError:
-        log.warning('Not running in Colab or google.colab module not available.')
-        # Disable drive backup if not in Colab
-        args.use_drive_backup = False
+        if 'google.colab' in str(get_ipython()): #Robust colab check
+            from google.colab import drive
+            logging.info('Running in Colab environment. Mounting Google Drive...')
+            drive.mount('/content/drive')
+            logging.info('Google Drive mounted successfully.')
+        else:
+            logging.warning('Not running in Colab environment.')
+            args.use_drive_backup = False
     except Exception as e:
-        log.error(f'Failed to mount Google Drive: {e}')
-        log.warning('Drive backup will be disabled.')
+        logging.error(f'Failed to mount Google Drive: {e}')
+        logging.warning('Drive backup will be disabled.')
         args.use_drive_backup = False
 
     log.info('Loading %s...', Game.__name__)
@@ -86,6 +86,12 @@ def main():
     log.info('Starting the learning process 🎉')
     c.learn()
 
+def get_ipython(): #added this function to avoid errors if get_ipython() is not defined.
+  try:
+    from IPython import get_ipython
+    return get_ipython()
+  except ImportError:
+    return None
 
 if __name__ == "__main__":
     main()

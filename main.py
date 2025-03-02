@@ -30,24 +30,24 @@ coloredlogs.install(level='DEBUG')  # Change this to DEBUG to see more info. #OR
 
 args = dotdict({
     'numIters': 1000,
-    'numEps': 100,              # Number of complete self-play games to simulate during a new iteration. Games per Checkpoint
-    'tempThreshold': 30,        #
-    'updateThreshold': 0.6,     # During arena playoff, new neural net will be accepted if threshold or more of games are won.
-    'maxlenOfQueue': 200000,    # Number of game examples to train the neural networks.
-    'numMCTSSims': 6000,          # Number of games moves for MCTS to simulate. 18496
-    'arenaCompare': 10,         # Number of games to play during arena play to determine if new net will be accepted.
+    'numEps': 100,
+    'tempThreshold': 30,
+    'updateThreshold': 0.6,
+    'maxlenOfQueue': 200000,
+    'numMCTSSims': 6000,
+    'arenaCompare': 10,
     'cpuct': 1,
 
     'checkpoint': './colab/',
     'load_model': False,
-    'load_folder_file': ('./05_02_25','checkpoint_1.pth.tar'),
-    'starting_iteration': 1,    # Set to higher than 1 if resuming from a checkpoint
+    'load_folder_file': ('./05_02_25', 'checkpoint_1.pth.tar'),
+    'starting_iteration': 1,
     'numItersForTrainExamplesHistory': 40,
     'verbose': True,
 
     # New parameters for Google Drive backup
-    'use_drive_backup': True,   # Enable backup to Google Drive
-    'drive_backup_path': '/content/drive/My Drive/BACKUP_FOLDER'  # Path in Google Drive to save backups
+    'use_drive_backup': True,
+    'drive_backup_path': '/content/drive/My Drive/BACKUP_FOLDER'
 })
 
 def main():
@@ -55,9 +55,13 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--use_drive_backup', action='store_true')
     parser.add_argument('--drive_backup_path', type=str)
-    args = parser.parse_args()
+    parsed_args = parser.parse_args()
 
-    logging.basicConfig(level=logging.INFO) #added logging basic config
+    # Merge parsed arguments into the existing 'args' object.
+    args.use_drive_backup = parsed_args.use_drive_backup
+    args.drive_backup_path = parsed_args.drive_backup_path
+
+    logging.basicConfig(level=logging.INFO)
     logging.info(f"use_drive_backup: {args.use_drive_backup}")
     logging.info(f"drive_backup_path: {args.drive_backup_path}")
 
@@ -97,12 +101,12 @@ def main():
     log.info('Starting the learning process 🎉')
     c.learn()
 
-def get_ipython(): #added this function to avoid errors if get_ipython() is not defined.
-  try:
-    from IPython import get_ipython
-    return get_ipython()
-  except ImportError:
-    return None
+def get_ipython():  # added this function to avoid errors if get_ipython() is not defined.
+    try:
+        from IPython import get_ipython
+        return get_ipython()
+    except ImportError:
+        return None
 
 if __name__ == "__main__":
     main()

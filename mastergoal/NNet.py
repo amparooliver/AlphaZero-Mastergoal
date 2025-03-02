@@ -15,7 +15,7 @@ from .MastergoalNNet import MastergoalNNet as model  # Specific neural network m
 
 # Hyperparameters
 args = dotdict({
-    'lr': 0.015,  # Learning rate
+    'lr': 0.01,  # Learning rate
     'momentum': 0.9,  # Momentum for SGD optimizer
     'epochs': 5,  # Number of training epochs
     'batch_size': 64,  # Batch size for training

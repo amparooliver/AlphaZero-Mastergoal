@@ -2,6 +2,7 @@ import logging
 import os
 import sys
 import time
+import shutil
 from collections import deque
 from pickle import Pickler, Unpickler
 from random import shuffle
@@ -29,6 +30,14 @@ class Coach():
         self.mcts = MCTS(self.game, self.nnet, self.args)
         self.trainExamplesHistory = []  # history of examples from args.numItersForTrainExamplesHistory latest iterations
         self.skipFirstSelfPlay = False  # can be overriden in loadTrainExamples()
+        
+        # Setup backup directory in Google Drive if available
+        self.drive_backup_dir = None
+        if hasattr(args, 'use_drive_backup') and args.use_drive_backup:
+            self.drive_backup_dir = args.drive_backup_path
+            if not os.path.exists(self.drive_backup_dir):
+                os.makedirs(self.drive_backup_dir)
+            log.info(f"Google Drive backup enabled. Saving to: {self.drive_backup_dir}")
 
     def executeEpisode(self):
         """
@@ -93,12 +102,16 @@ class Coach():
             if not self.skipFirstSelfPlay or i > 1:
                 iterationTrainExamples = deque([], maxlen=self.args.maxlenOfQueue)
 
-                for _ in tqdm(range(self.args.numEps), desc="Self Play"):
+                for ep_idx in tqdm(range(self.args.numEps), desc="Self Play"):
                     self.mcts = MCTS(self.game, self.nnet, self.args)  # reset search tree
                     episode_start_time = time.time()
-                    iterationTrainExamples += self.executeEpisode()
+                    episode_examples = self.executeEpisode()
+                    iterationTrainExamples += episode_examples
                     episode_end_time = time.time()
                     log.info(f"Game done in {round((episode_end_time - episode_start_time) * 1000)}ms")
+                    
+                    # Save episode examples immediately after each episode
+                    self.saveEpisodeExamples(i, ep_idx, episode_examples)
 
                 # save the iteration examples to the history 
                 self.trainExamplesHistory.append(iterationTrainExamples)
@@ -139,13 +152,43 @@ class Coach():
                     self.nnet.load_checkpoint(folder=self.args.checkpoint, filename='temp.pth.tar')
                 else:
                     log.info('ACCEPTING NEW MODEL')
-                    self.nnet.save_checkpoint(folder=self.args.checkpoint, filename=self.getCheckpointFile(i))
+                    checkpoint_file = self.getCheckpointFile(i)
+                    self.nnet.save_checkpoint(folder=self.args.checkpoint, filename=checkpoint_file)
                     self.nnet.save_checkpoint(folder=self.args.checkpoint, filename='best.pth.tar')
+                    
+                    # Backup the accepted model to Drive
+                    self.backupToGoogleDrive(os.path.join(self.args.checkpoint, checkpoint_file))
+                    self.backupToGoogleDrive(os.path.join(self.args.checkpoint, 'best.pth.tar'))
             else:
                 self.nnet.train(trainExamples)
-                log.info(f'SAVING CHECKPOINT: {self.getCheckpointFile(i)}')
-                self.nnet.save_checkpoint(folder=self.args.checkpoint, filename=self.getCheckpointFile(i))
+                checkpoint_file = self.getCheckpointFile(i)
+                log.info(f'SAVING CHECKPOINT: {checkpoint_file}')
+                self.nnet.save_checkpoint(folder=self.args.checkpoint, filename=checkpoint_file)
+                
+                # Backup the checkpoint to Drive
+                self.backupToGoogleDrive(os.path.join(self.args.checkpoint, checkpoint_file))
 
+    def saveEpisodeExamples(self, iteration, episode_idx, episode_examples):
+        """
+        Save examples from a single episode immediately after it completes
+        """
+        if self.drive_backup_dir is None:
+            return  # Skip if Google Drive backup is not enabled
+        
+        folder = self.args.checkpoint
+        if not os.path.exists(folder):
+            os.makedirs(folder)
+            
+        # Create episode-specific filename
+        filename = f"iter_{iteration}_episode_{episode_idx}.examples"
+        filepath = os.path.join(folder, filename)
+        
+        log.info(f"Saving episode examples to {filepath}")
+        with open(filepath, "wb+") as f:
+            Pickler(f).dump(episode_examples)
+        
+        # Backup to Google Drive
+        self.backupToGoogleDrive(filepath)
 
     def getCheckpointFile(self, iteration):
         return 'checkpoint_' + str(iteration) + '.pth.tar'
@@ -158,16 +201,48 @@ class Coach():
         log.info(f"Saving examples to {filename}")
         with open(filename, "wb+") as f:
             Pickler(f).dump(self.trainExamplesHistory)
-        f.closed
+        
+        # Backup to Google Drive
+        self.backupToGoogleDrive(filename)
+
+    def backupToGoogleDrive(self, file_path):
+        """
+        Backup a file to Google Drive if Drive backup is enabled
+        """
+        if self.drive_backup_dir is None:
+            return
+        
+        try:
+            filename = os.path.basename(file_path)
+            drive_path = os.path.join(self.drive_backup_dir, filename)
+            
+            # Copy the file to Google Drive
+            shutil.copy2(file_path, drive_path)
+            log.info(f"Backed up {filename} to Google Drive: {drive_path}")
+        except Exception as e:
+            log.error(f"Failed to backup to Google Drive: {e}")
 
     def loadTrainExamples(self):
         modelFile = os.path.join(self.args.load_folder_file[0], self.args.load_folder_file[1])
         examplesFile = modelFile + ".examples"
         if not os.path.isfile(examplesFile):
             log.warning(f'File "{examplesFile}" with trainExamples not found!')
-            r = input("Continue? [y|n]")
-            if r != "y":
-                sys.exit()
+            
+            # Try to find it in Google Drive backup
+            if self.drive_backup_dir is not None:
+                drive_path = os.path.join(self.drive_backup_dir, os.path.basename(examplesFile))
+                if os.path.isfile(drive_path):
+                    log.info(f"Found backup in Google Drive. Restoring from: {drive_path}")
+                    shutil.copy2(drive_path, examplesFile)
+                else:
+                    log.warning(f"No backup found in Google Drive either: {drive_path}")
+                    r = input("Continue? [y|n]")
+                    if r != "y":
+                        sys.exit()
+            else:
+                r = input("Continue? [y|n]")
+                if r != "y":
+                    sys.exit()
         else:
             log.info("File with trainExamples found. Loading it...")
             with open(examplesFile, "rb") as f:

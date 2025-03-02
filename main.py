@@ -32,13 +32,8 @@ args = dotdict({
     'tempThreshold': 30,        #
     'updateThreshold': 0.6,     # During arena playoff, new neural net will be accepted if threshold or more of games are won.
     'maxlenOfQueue': 200000,    # Number of game examples to train the neural networks.
-<<<<<<< HEAD
     'numMCTSSims': 6000,          # Number of games moves for MCTS to simulate. 18496
     'arenaCompare': 10,         # Number of games to play during arena play to determine if new net will be accepted.
-=======
-    'numMCTSSims': 5000,          # Number of games moves for MCTS to simulate.
-    'arenaCompare': 40,         # Number of games to play during arena play to determine if new net will be accepted.
->>>>>>> 23653389a448a40569a28d483285f5ea5262956c
     'cpuct': 1,
 
     'checkpoint': './colab/',
@@ -46,10 +41,29 @@ args = dotdict({
     'load_folder_file': ('./05_02_25','checkpoint_1.pth.tar'),
     'starting_iteration': 1,    # Set to higher than 1 if resuming from a checkpoint
     'numItersForTrainExamplesHistory': 40,
-    'verbose': True
+    'verbose': True,
+
+    # New parameters for Google Drive backup
+    'use_drive_backup': True,   # Enable backup to Google Drive
+    'drive_backup_path': '/content/drive/MyDrive/alpha_zero_backups'  # Path in Google Drive to save backups
 })
 
 def main():
+    # Google Drive mounting code
+    try:
+        from google.colab import drive
+        log.info('Running in Colab environment. Mounting Google Drive...')
+        drive.mount('/content/drive')
+        log.info('Google Drive mounted successfully.')
+    except ImportError:
+        log.warning('Not running in Colab or google.colab module not available.')
+        # Disable drive backup if not in Colab
+        args.use_drive_backup = False
+    except Exception as e:
+        log.error(f'Failed to mount Google Drive: {e}')
+        log.warning('Drive backup will be disabled.')
+        args.use_drive_backup = False
+
     log.info('Loading %s...', Game.__name__)
     g = Game()
 

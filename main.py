@@ -1,4 +1,5 @@
 import logging
+import os
 
 import coloredlogs
 
@@ -50,8 +51,17 @@ args = dotdict({
 
 def main():
     # Google Drive mounting code
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--use_drive_backup', action='store_true')
+    parser.add_argument('--drive_backup_path', type=str)
+    args = parser.parse_args()
+
+    logging.basicConfig(level=logging.INFO) #added logging basic config
+    logging.info(f"use_drive_backup: {args.use_drive_backup}")
+    logging.info(f"drive_backup_path: {args.drive_backup_path}")
+
     try:
-        if 'google.colab' in str(get_ipython()): #Robust colab check
+        if 'google.colab' in str(get_ipython()):
             from google.colab import drive
             logging.info('Running in Colab environment. Mounting Google Drive...')
             drive.mount('/content/drive')

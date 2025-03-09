@@ -26,7 +26,7 @@ def main():
 
     # Player 2 is the NeuralNet
     n1 = nn(g)
-    n1.load_checkpoint(r"C:\Users\Amparo\Documents\TESIS\REPO_FINAL_TESIS\AlphaMastergoal\try2", "best.pth.tar")
+    n1.load_checkpoint(r"C:\Users\Amparo\Documents\TESIS\REPO_FINAL_TESIS\AlphaMastergoal\new", "temp.h5")
     # Parameters are defined for the NN
     args1 = dotdict({'numMCTSSims': 45, 'cpuct':0.9, 'verbose': True})
     mcts1 = MCTS(g, n1, args1)

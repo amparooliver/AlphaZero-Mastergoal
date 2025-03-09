@@ -34,7 +34,7 @@ args = dotdict({
     'tempThreshold': 30,
     'updateThreshold': 0.6,
     'maxlenOfQueue': 200000,
-    'numMCTSSims': 18496, #18496
+    'numMCTSSims': 100, #18496
     'arenaCompare': 10,
     'cpuct': 1,
 
@@ -98,7 +98,7 @@ def main():
         log.info("Loading 'trainExamples' from file...")
         c.loadTrainExamples()
 
-    log.info('Starting the learning process 🎉')
+    log.info('Starting the learning process!!')
     c.learn()
 
 def get_ipython():  # added this function to avoid errors if get_ipython() is not defined.

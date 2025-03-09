@@ -34,11 +34,11 @@ args = dotdict({
     'tempThreshold': 30,
     'updateThreshold': 0.6,
     'maxlenOfQueue': 200000,
-    'numMCTSSims': 6000,
+    'numMCTSSims': 18496,
     'arenaCompare': 10,
     'cpuct': 1,
 
-    'checkpoint': './colab/',
+    'checkpoint': './IDEAL/',
     'load_model': False,
     'load_folder_file': ('./05_02_25', 'checkpoint_1.pth.tar'),
     'starting_iteration': 1,

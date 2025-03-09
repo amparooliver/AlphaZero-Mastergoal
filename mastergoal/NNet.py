@@ -17,7 +17,7 @@ from .MastergoalNNet import MastergoalNNet as model  # Specific neural network m
 args = dotdict({
     'lr': 0.01,  # Learning rate
     'momentum': 0.9,  # Momentum for SGD optimizer
-    'epochs': 10,  # Number of training epochs
+    'epochs': 5,  # Number of training epochs
     'batch_size': 64,  # Batch size for training
     'cuda': torch.cuda.is_available(),  # Check if CUDA is available for GPU usage
 }) 

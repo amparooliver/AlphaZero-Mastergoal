@@ -339,7 +339,7 @@ class MastergoalBoard():
             else:
                 self.white_goals += 1
                 return 1
-        if (self.move_count >= 100):
+        if (self.move_count >= 80):
             # Game taking too long, calling it a draw!
             return 0.1     
         return 0

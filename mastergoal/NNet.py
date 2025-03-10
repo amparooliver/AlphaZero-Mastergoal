@@ -2,6 +2,7 @@ import os
 import time
 import sys
 import numpy as np
+import logging
 
 from tqdm import tqdm
 sys.path.append('../..')  # Add parent directory to the system path
@@ -11,14 +12,24 @@ from NeuralNet import NeuralNet  # Base class for neural networks
 import torch
 import torch.optim as optim
 
+# Create a logger
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+# Set up a file handler if you want to log to a file
+file_handler = logging.FileHandler('training.log')
+file_handler.setLevel(logging.INFO)
+formatter = logging.Formatter('%(asctime)s - %(message)s')
+file_handler.setFormatter(formatter)
+logger.addHandler(file_handler)
+
 from .MastergoalNNet import MastergoalNNet as model  # Specific neural network model for Mastergoal
 
 # Hyperparameters
 args = dotdict({
     'lr': 0.01,  # Learning rate
     'momentum': 0.9,  # Momentum for SGD optimizer
-    'epochs': 5,  # Number of training epochs
-    'batch_size': 64,  # Batch size for training
+    'epochs': 20,  # Number of training epochs
+    'batch_size': 128,  # Batch size for training 64 normally but 128 for gpu
     'cuda': torch.cuda.is_available(),  # Check if CUDA is available for GPU usage
 }) 
 
@@ -49,6 +60,7 @@ class NNetWrapper(NeuralNet):
 
         for epoch in range(args.epochs):  # Train for multiple epochs
             print('EPOCH ::: ' + str(epoch + 1))
+            logger.info(f'EPOCH ::: {epoch + 1}') 
             self.model.train()  # Set the model to training mode
             pi_losses = AverageMeter()  # Track policy loss
             v_losses = AverageMeter()  # Track value loss
@@ -79,6 +91,8 @@ class NNetWrapper(NeuralNet):
                 v_losses.update(l_v.item(), boards.size(0))
                 t.set_postfix(Loss_pi=pi_losses, Loss_v=v_losses)  # Update progress bar
 
+                # Log losses
+                logger.info(f'Loss_pi: {pi_losses.avg}, Loss_v: {v_losses.avg}')
                 # Backward pass and optimizer step
                 optimizer.zero_grad()
                 total_loss.backward()

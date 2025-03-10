@@ -35,6 +35,7 @@ class NNetWrapper(NeuralNet):
         self.action_size = game.getActionSize()  # Number of possible actions
 
         if args.cuda:
+            print("Cuda AVAILABLE!")
             self.model.cuda()  # Move the model to GPU if CUDA is available
 
 

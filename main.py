@@ -30,12 +30,12 @@ coloredlogs.install(level='DEBUG')  # Change this to DEBUG to see more info. #OR
 
 args = dotdict({
     'numIters': 1000,
-    'numEps': 100,
-    'tempThreshold': 30,
-    'updateThreshold': 0.6,
-    'maxlenOfQueue': 200000,
-    'numMCTSSims': 18496, #18496
-    'arenaCompare': 10,
+    'numEps': 100,              # Number of complete self-play games to simulate during a new iteration. Games per Checkpoint
+    'tempThreshold': 30,        #
+    'updateThreshold': 0.6,     # During arena playoff, new neural net will be accepted if threshold or more of games are won.
+    'maxlenOfQueue': 200000,    # Number of game examples to train the neural networks.
+    'numMCTSSims': 18496, ## Number of games moves for MCTS to simulate. 18496
+    'arenaCompare': 20,
     'cpuct': 1,
 
     'checkpoint': './IDEAL/',
@@ -45,40 +45,9 @@ args = dotdict({
     'numItersForTrainExamplesHistory': 40,
     'verbose': True,
 
-    # New parameters for Google Drive backup
-    'use_drive_backup': True,
-    'drive_backup_path': '/content/drive/My Drive/BACKUP_FOLDER'
 })
 
 def main():
-    # Google Drive mounting code
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--use_drive_backup', action='store_true')
-    parser.add_argument('--drive_backup_path', type=str)
-    parsed_args = parser.parse_args()
-
-    # Merge parsed arguments into the existing 'args' object.
-    args.use_drive_backup = parsed_args.use_drive_backup
-    args.drive_backup_path = parsed_args.drive_backup_path
-
-    logging.basicConfig(level=logging.INFO)
-    logging.info(f"use_drive_backup: {args.use_drive_backup}")
-    logging.info(f"drive_backup_path: {args.drive_backup_path}")
-
-    try:
-        if 'google.colab' in str(get_ipython()):
-            from google.colab import drive
-            logging.info('Running in Colab environment. Mounting Google Drive...')
-            drive.mount('/content/drive')
-            logging.info('Google Drive mounted successfully.')
-        else:
-            logging.warning('Not running in Colab environment.')
-            args.use_drive_backup = False
-    except Exception as e:
-        logging.error(f'Failed to mount Google Drive: {e}')
-        logging.warning('Drive backup will be disabled.')
-        args.use_drive_backup = False
-
     log.info('Loading %s...', Game.__name__)
     g = Game()
 
@@ -101,12 +70,6 @@ def main():
     log.info('Starting the learning process 🎉')
     c.learn()
 
-def get_ipython():  # added this function to avoid errors if get_ipython() is not defined.
-    try:
-        from IPython import get_ipython
-        return get_ipython()
-    except ImportError:
-        return None
 
 if __name__ == "__main__":
     main()

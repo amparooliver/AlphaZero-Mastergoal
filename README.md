@@ -1,84 +1,127 @@
-# Colab Training: python main.py --use_drive_backup --drive_backup_path='/content/drive/My Drive/BACKUP_FOLDER'
+# 🏆 MasterGoal AlphaZero Implementation
 
-# MasterGoal AlphaZero Implementation
+> *This work is dedicated to the memory of Alberto Bogliaccini, the creator of MasterGoal.*
 
-This repository contains the implementation of **AlphaZero** for the custom game **MasterGoal**, inspired by soccer mechanics. The project uses a generalized version of AlphaZero, adapted to work with the unique rules and dynamics of MasterGoal.
+Welcome to the official repository for the **MasterGoal AlphaZero implementation**! This project adapts the powerful AlphaZero algorithm to the unique soccer-inspired game of MasterGoal, creating an AI that can learn and master the game through self-play.
 
-This work is dedicated to the memory of Alberto Bogliaccini, the creator of MasterGoal.
-## Acknowledgments
+## 📋 Table of Contents
+- [Introduction](#-introduction)
+- [Getting Started](#-getting-started)
+  - [Docker Setup (Recommended)](#docker-setup-recommended)
+  - [Virtual Environment Setup](#virtual-environment-setup)
+- [Training Your AI](#-training-your-ai)
+- [Playing Against Your AI](#-playing-against-your-ai)
+- [Acknowledgments](#-acknowledgments)
 
-This project is built upon the incredible work of the following creators:  
-- **Dougyd92**: [AlphaZero General for DuckChess](https://github.com/dougyd92/alpha-zero-general-duckchess).  
-- **Surag Nair**: [AlphaZero General](https://github.com/suragnair/alpha-zero-general), which served as the base framework for this adaptation.  
+## 🎮 Introduction
+MasterGoal combines strategic thinking with soccer mechanics, creating a unique board game experience. This project implements the cutting-edge AlphaZero algorithm to train an AI that can learn and master the intricacies of MasterGoal through self-play and reinforcement learning.
 
-Special thanks to both for open-sourcing their work, which made this adaptation possible.
+## 🚀 Getting Started
+Choose your preferred method to set up the project:
 
----
+### Docker Setup (Recommended)
+Containerized for ease of use across all systems! 🐳
 
-## Installation
+#### Prerequisites
+* Docker installed on your system
 
-To get started, follow these steps:
-
-1. **Clone the Repository**  
+#### Installation
+1. **Clone the Repository:**
    ```bash
-   git clone https://github.com/amparooliver/AlphaMastergoal.git
-   cd AlphaMastergoal
+   git clone https://github.com/amparooliver/Mastergoal-AlphaZero.git
+   cd Mastergoal-AlphaZero
    ```
 
-2. **Create a Virtual Environment**  
-   It’s recommended to use a virtual environment to manage dependencies. Ensure you have `Python 3.9` installed to avoid compatibility issues:  
+2. **Build the Docker Image:**
    ```bash
+   docker build -t mastergoal-alphazero:latest .
+   ```
+
+#### Running Scripts
+To run any Python script in this project:
+```bash
+docker run mastergoal-alphazero:latest python <script_name.py>
+```
+
+**⚽ Quick Examples:**
+* Start training:
+  ```bash
+  docker run mastergoal-alphazero:latest python main.py
+  ```
+* Play against the AI:
+  ```bash
+  docker run mastergoal-alphazero:latest python human_vs_ai.py
+  ```
+
+### Virtual Environment Setup
+For those who prefer a traditional setup. 🛠️
+
+#### Prerequisites
+* Python 3.9
+
+#### Installation
+1. **Clone the Repository:**
+   ```bash
+   git clone https://github.com/amparooliver/Mastergoal-AlphaZero.git
+   cd Mastergoal-AlphaZero
+   ```
+
+2. **Create a Virtual Environment:**
+   ```bash
+   # Linux
    sudo apt install python3.9-venv
    python3.9 -m venv myenv
-   source myenv/bin/activate  # Linux/macOS
-   myenv\Scripts\activate     # Windows
+   source myenv/bin/activate
+   
+   # Windows
+   python3.9 -m venv myenv
+   myenv\Scripts\activate
    ```
 
-3. **Install Requirements**  
-   All necessary dependencies are listed in `requirements.txt`. Install them with:  
+3. **Install Requirements:**
    ```bash
    pip install -r requirements.txt
    ```
----
 
-## Training a Model
-
-To train the AlphaZero model for MasterGoal, simply run:  
+## 🧠 Training Your AI
+Start the AlphaZero training process with:
 ```bash
 python main.py
-```  
-This script starts the self-play, training, and evaluation pipeline. For more details, refer to the comments in `main.py`.
+```
 
----
-## Playing Against a Trained Model
+This initiates the complete pipeline:
+1. Self-play to generate training data
+2. Neural network training
+3. Model evaluation
 
-There are two ways to interact with a trained model:
+For detailed configuration options, check the comments in `main.py` and `NNet.py`.
 
-1. **Compare Against a Random Player**  
-   Use `compare_to_random.py` to evaluate how the trained model performs against random moves.  
+## 🎯 Playing Against Your AI
+Two options to test your trained AI:
 
-   - **Edit the File**: Before running, ensure you specify the path to your trained model (this is indicated in the file).  
-   - **Run the Script**:  
-     ```bash
-     python .\compare_to_random.py
-     ```
+### 1. AI vs Random Player Evaluation
+Measure how well your AI performs against random moves:
 
-2. **Play as a Human Against the AI**  
-   Use `human_vs_ai.py` to play against the trained model.  
+* **Setup:** Edit `compare_to_random.py` to point to your trained model
+* **Run:**
+  ```bash
+  python compare_to_random.py
+  ```
 
-   - **Edit the File**: Specify the path to your trained model as instructed in the file.  
-   - **Run the Script**:  
-     ```bash
-     python .\human_vs_ai.py
-     ```  
-   During execution, the script will provide detailed instructions for how to play.
+### 2. Human vs AI Challenge
+Challenge your AI to a match:
 
----
-## About MasterGoal (Temporary)
+* **Setup:** Edit `human_vs_ai.py` to point to your trained model
+* **Run:**
+  ```bash
+  python human_vs_ai.py
+  ```
+* Follow the on-screen instructions to make your moves
 
-MasterGoal is a soccer-inspired strategy game. The goal is to implement the best possible game-playing AI using reinforcement learning principles from AlphaZero.  
-- The game board is 15x11, with unique mechanics for ball handling and player movement.  
-- The rules and dynamics are specifically designed for this project, creating a new and engaging challenge.
+## 👏 Acknowledgments
+This project stands on the shoulders of these amazing works:
 
+* **Dougyd92:** [AlphaZero General for DuckChess](https://github.com/dougyd92/alpha-zero-general-duckchess)
+* **Surag Nair:** [AlphaZero General](https://github.com/suragnair/alpha-zero-general)
 
-
+Special thanks to both developers for open-sourcing their implementations, which made this adaptation possible! 🙏

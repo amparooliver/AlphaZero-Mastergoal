@@ -26,16 +26,17 @@ def main():
 
     # Player 2 is the NeuralNet
     n1 = nn(g)
-    n1.load_checkpoint(r"C:\Users\Amparo\Documents\TESIS\REPO_FINAL_TESIS\AlphaMastergoal\try2", "best.pth.tar")
+    n1.load_checkpoint(r"C:\Users\Amparo\Music\MODELS\17_02_25", "best.pth.tar")
     # Parameters are defined for the NN
-    args1 = dotdict({'numMCTSSims': 45, 'cpuct':0.9, 'verbose': True})
+    args1 = dotdict({'numMCTSSims': 500, 'cpuct':1, 'verbose': True})
     mcts1 = MCTS(g, n1, args1)
     n1p = lambda x: np.argmax(mcts1.getActionProb(x, temp=0))
 
     # The interface is much easier if the human is white
     # The arena (which handles the game) is activated
+    #arena = Arena.Arena(humanPlayer, n1p, g, display=(lambda x: x))
+    #print("You are playing as white")
     arena = Arena.Arena(humanPlayer, n1p, g, display=(lambda x: x))
-    print("You are playing as white")
     result = arena.playGame(verbose=True)
 
     if(result == 1):

@@ -237,9 +237,7 @@ class MastergoalBoard():
                 #print(f"PELOTA. new_row = {new_row} && new_col = {new_col}")
                 if 0 <= new_row < self.rows and 0 <= new_col < self.cols and \
                     (boardCopy[new_row, new_col] == 1 or boardCopy[new_row, new_col] == -1 ):
-                    #print("Retorna TRUE")
                     return True
-                #print(f"Retorna falso y esto enccuentra {boardCopy[new_row, new_col]}")
         return False
 
     def is_own_corner(self, row, col):
@@ -270,22 +268,14 @@ class MastergoalBoard():
         self.pieces[start_row, start_col] = Pieces.EMPTY
         self.pieces[end_row, end_col] = 1
         self.move_count += 1
+        #print(f"Move count is: {self.move_count}")
 
         # Kick ball if applicable
         if ball_kick != 32:
             ball_row, ball_col = self.get_ball_position()
             new_ball_row, new_ball_col = ball_row + ball_kick[0], ball_col + ball_kick[1]
             self.pieces[ball_row, ball_col] = Pieces.EMPTY
-            # Verificar si los nuevos índices están dentro de los límites
-            #if not (0 <= new_ball_row < self.rows and 0 <= new_ball_col < self.cols):
-                #print(f"Error: Índice fuera de límites. Acción: {action}, Movimiento de la pelota: {ball_kick}")
             self.pieces[new_ball_row, new_ball_col] = Pieces.BALL
-            self.move_count += 1
-            #print(f"BALL MOVED Counter: {self.move_count}")
-
-            #if self.is_goal(new_ball_row):
-                #print("IS A GOAL!!")
-                #self.handle_goal(new_ball_row)
 
         # Flipping board!!!!
         # Voltear el tablero para la perspectiva del otro jugador
@@ -317,31 +307,26 @@ class MastergoalBoard():
             self.red_goals += 1
         else:
             self.white_goals += 1
-            #self.white_goals = 0
-            #self.reset_after_goal()
         if self.red_goals == self.goals_to_win or self.white_goals == self.goals_to_win:
             return True
-        #    #self.reset_after_goal()
         return False
 
     def reset_after_goal(self):
         self.red_goals = 0
         self.white_goals = 0
-        #self.pieces = self.getInitialPieces()
 
     def is_game_over(self, verbose):
-        
         ball_row, ball_col = self.get_ball_position()
         if self.is_goal(ball_row):
             if self.red_turn:
                 self.red_goals += 1
-                return 1
+                return -1
             else:
                 self.white_goals += 1
                 return 1
         if (self.move_count >= 80):
             # Game taking too long, calling it a draw!
-            return 0.1     
+            return 1e-4     
         return 0
 
 

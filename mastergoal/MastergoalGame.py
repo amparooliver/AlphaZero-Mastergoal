@@ -71,7 +71,7 @@ class MastergoalGame(Game):
                small non-zero value for draw.
                
         """
-        return player * board.is_game_over(verbose)
+        return board.is_game_over(verbose)
 
     def getCanonicalForm(self, board, player):
         """

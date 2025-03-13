@@ -51,30 +51,6 @@ class MastergoalNNet(nn.Module):
 
     def forward(self, x):
         x = self.conv1(x)
-        #print("After conv1:", x.shape)  # Verifica aquí
-        x = self.residual_blocks(x)
-        #print("After residual blocks:", x.shape)  # Verifica aquí
-        pi = self.policy_head(x)
-        #print("Policy head output:", pi.shape)  # Verifica aquí
-        #print("After policy:",x.shape)
-        v = self.value_head(x)
-        #print("Value head output:", v.shape)  # Verifica aquí
-        return pi, v
-
-class ResidualBlock(nn.Module):
-    def __init__(self, input_channels, output_channels, kernel_size):
-        super(ResidualBlock, self).__init__()
-        self.conv1 = nn.Conv2d(input_channels, output_channels, kernel_size, stride=1, padding=1)
-        self.bn1 = nn.BatchNorm2d(output_channels)
-        self.conv2 = nn.Conv2d(input_channels, output_channels, kernel_size, stride=1, padding=1)
-        self.bn2 =  nn.BatchNorm2d(output_channels)
-        self.shortcut = nn.Sequential(
-            nn.Conv2d(input_channels, output_channels, kernel_size, stride=1, padding=1),
-            nn.BatchNorm2d(output_channels)
-        )
-
-    def forward(self, x):
-        x = self.conv1(x)
         x = self.residual_blocks(x)
 
         pi = self.policy_head(x)

@@ -9,16 +9,16 @@ EPS = 1e-8
 log = logging.getLogger(__name__)
 
 # A dedicated logger for MCTS debugging
-debug_log = logging.getLogger('MCTS_Debug')
-debug_log.setLevel(logging.DEBUG)
-debug_log.propagate = False  # Prevent propagation to other loggers
+#debug_log = logging.getLogger('MCTS_Debug')
+#debug_log.setLevel(logging.DEBUG)
+#debug_log.propagate = False  # Prevent propagation to other loggers
 
 # Configuration
-file_handler = logging.FileHandler('mcts_debug2.log')
-file_handler.setLevel(logging.DEBUG)
-formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
-file_handler.setFormatter(formatter)
-debug_log.addHandler(file_handler)
+#file_handler = logging.FileHandler('mcts_debug2.log')
+#file_handler.setLevel(logging.DEBUG)
+#formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+#file_handler.setFormatter(formatter)
+#debug_log.addHandler(file_handler)
 
 class TreeLevel():
     """

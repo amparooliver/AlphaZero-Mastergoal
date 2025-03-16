@@ -24,8 +24,8 @@ def main():
     g = MastergoalGame()
 
     n1 = nn(g)
-    n1.load_checkpoint(r"C:\Users\Amparo\Documents\TESIS\REPO_FINAL_TESIS\AlphaMastergoal\try2", "best.pth.tar")
-    args1 = dotdict({'numMCTSSims': 35, 'cpuct':0.9, 'verbose': True})
+    n1.load_checkpoint(r"C:\Users\Amparo\Documents\PROYECTO-FINAL\Mastergoal-AlphaZero\14_03_putorch", "temp.pth.tar")
+    args1 = dotdict({'numMCTSSims': 100, 'cpuct':1, 'verbose': True})
     mcts1 = MCTS(g, n1, args1)
     n1p = lambda x: np.argmax(mcts1.getActionProb(x, temp=0))
 

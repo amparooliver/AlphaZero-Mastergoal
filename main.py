@@ -6,7 +6,8 @@ import coloredlogs
 
 from Coach import Coach
 from mastergoal.MastergoalGame import MastergoalGame as Game
-from mastergoal.NNet import NNetWrapper as nn
+from mastergoal.NNet import NNetWrapper as nn #PyTorch
+#from mastergoal.keras.NNet import NNetWrapper as nn #Keras
 from utils import *
 
 # Debug, trying to reproduce a specific error
@@ -29,16 +30,16 @@ log = logging.getLogger(__name__)
 coloredlogs.install(level='DEBUG')  # Change this to DEBUG to see more info. #OR INFO
 
 args = dotdict({
-    'numIters': 5,
-    'numEps': 1000,              # Number of complete self-play games to simulate during a new iteration. Games per Checkpoint
-    'tempThreshold': 30,        #
+    'numIters': 1,
+    'numEps': 2,              # Number of complete self-play games to simulate during a new iteration. Games per Checkpoint
+    'tempThreshold': 40,        #
     'updateThreshold': 0.6,     # During arena playoff, new neural net will be accepted if threshold or more of games are won.
     'maxlenOfQueue': 200000,    # Number of game examples to train the neural networks.
-    'numMCTSSims': 300, ## Number of games moves for MCTS to simulate. 18496
+    'numMCTSSims': 6000, ## Number of games moves for MCTS to simulate. 18496
     'arenaCompare': 20,
     'cpuct': 1,
 
-    'checkpoint': './13_03/',
+    'checkpoint': './KAGGLE_16_03/',
     'load_model': False,
     'load_folder_file': ('./13_03', 'checkpoint_1.pth.tar'),
     'starting_iteration': 1,

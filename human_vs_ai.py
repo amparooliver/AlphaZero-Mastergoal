@@ -26,9 +26,9 @@ def main():
 
     # Player 2 is the NeuralNet
     n1 = nn(g)
-    n1.load_checkpoint(r"C:\Users\Amparo\Music\MODELS\17_02_25", "best.pth.tar")
+    n1.load_checkpoint(r"C:\Users\Amparo\Documents\PROYECTO-FINAL\Mastergoal-AlphaZero\14_03_putorch", "temp.pth.tar")
     # Parameters are defined for the NN
-    args1 = dotdict({'numMCTSSims': 500, 'cpuct':1, 'verbose': True})
+    args1 = dotdict({'numMCTSSims': 100, 'cpuct':1, 'verbose': True})
     mcts1 = MCTS(g, n1, args1)
     n1p = lambda x: np.argmax(mcts1.getActionProb(x, temp=0))
 

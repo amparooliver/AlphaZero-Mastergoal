@@ -62,6 +62,7 @@ class Coach():
                 log.info(f"Turn #{episodeStep}")
 
             temp = int(episodeStep < self.args.tempThreshold)
+            print(f"Episode: {episodeStep} and Current temp: {temp}")
 
             pi = self.mcts.getActionProb(canonicalBoard, temp=temp)
             sym = self.game.getSymmetries(canonicalBoard, pi)

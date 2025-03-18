@@ -30,7 +30,7 @@ args = dotdict({
     'lr': 0.01,  # Learning rate
     'momentum': 0.9,  # Momentum for SGD optimizer
     'epochs': 5,  # Number of training epochs
-    'batch_size': 128,  # Batch size for training 64 normally but 128 for gpu
+    'batch_size': 64,  # Batch size for training 64 normally but 128 for gpu
     'cuda': torch.cuda.is_available(),  # Check if CUDA is available for GPU usage
 }) 
 

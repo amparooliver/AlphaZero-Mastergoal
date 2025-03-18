@@ -30,7 +30,7 @@ log = logging.getLogger(__name__)
 coloredlogs.install(level='DEBUG')  # Change this to DEBUG to see more info. #OR INFO
 
 args = dotdict({
-    'numIters': 1,
+    'numIters': 2,
     'numEps': 80,              # Number of complete self-play games to simulate during a new iteration. Games per Checkpoint
     'tempThreshold': 30,        #
     'updateThreshold': 0.6,     # During arena playoff, new neural net will be accepted if threshold or more of games are won.
@@ -39,10 +39,10 @@ args = dotdict({
     'arenaCompare': 20,
     'cpuct': 1,
 
-    'checkpoint': './KAGGLE_16_03/',
-    'load_model': False,
-    'load_folder_file': ('./13_03', 'checkpoint_1.pth.tar'),
-    'starting_iteration': 1,
+    'checkpoint': './KAGGLE_17/',
+    'load_model': True,
+    'load_folder_file': ('./KAGGLE_17', 'checkpoint_0.pth.tar'),
+    'starting_iteration': 2,
     'numItersForTrainExamplesHistory': 40,
     'verbose': True,
 

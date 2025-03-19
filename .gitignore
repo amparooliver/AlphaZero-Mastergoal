@@ -1,2 +1,5 @@
 myenv/
 new/
+./debug.log
+./mcts_debug2.log
+./training.log

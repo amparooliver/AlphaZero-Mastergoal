@@ -8,6 +8,7 @@ from tqdm import tqdm
 sys.path.append('../..')  # Add parent directory to the system path
 from utils import *  # Import utility functions
 from NeuralNet import NeuralNet  # Base class for neural networks
+from TrainingPlotter import TrainingPlotter  # Import our new plotting class
 
 import torch
 import torch.optim as optim
@@ -32,6 +33,7 @@ args = dotdict({
     'epochs': 5,  # Number of training epochs
     'batch_size': 64,  # Batch size for training 64 normally but 128 for gpu
     'cuda': torch.cuda.is_available(),  # Check if CUDA is available for GPU usage
+    'plot_dir': 'training_plots',  # Directory to save plots
 }) 
 
 
@@ -45,6 +47,7 @@ class NNetWrapper(NeuralNet):
         self.model = model(game)  # Initialize the specific neural network
         self.input_shape = game.getBoardSize()  # Input dimensions
         self.action_size = game.getActionSize()  # Number of possible actions
+        self.plotter = None  # Will be initialized during training
 
         if args.cuda:
             print("Cuda AVAILABLE!")
@@ -57,6 +60,9 @@ class NNetWrapper(NeuralNet):
         Args:
             examples: List of (board, pi, v) tuples.
         """
+        # Initialize the plotter
+        self.plotter = TrainingPlotter(output_dir=args.plot_dir)
+        
         optimizer = optim.SGD(self.model.parameters(), lr=args.lr, momentum=args.momentum)  # SGD optimizer
 
         for epoch in range(args.epochs):  # Train for multiple epochs
@@ -68,7 +74,7 @@ class NNetWrapper(NeuralNet):
 
             batch_count = int(len(examples) / args.batch_size)  # Number of batches
             t = tqdm(range(batch_count), desc='Training Net')  # Progress bar for visualization
-            for _ in t:
+            for batch_idx in t:
                 # Sample a batch of examples
                 sample_ids = np.random.randint(len(examples), size=args.batch_size)
                 boards, pis, vs = list(zip(*[examples[i] for i in sample_ids]))
@@ -94,10 +100,24 @@ class NNetWrapper(NeuralNet):
 
                 # Log losses
                 logger.info(f'Loss_pi: {pi_losses.avg}, Loss_v: {v_losses.avg}')
+                
+                # Record data for plotting
+                self.plotter.record_batch(epoch + 1, batch_idx + 1, l_pi.item(), l_v.item())
+                
                 # Backward pass and optimizer step
                 optimizer.zero_grad()
                 total_loss.backward()
                 optimizer.step()
+            
+            # Save intermediate data and plots after each epoch
+            self.plotter.save_data()
+            self.plotter.plot_losses()
+            
+        # Final save of all data and plots
+        self.plotter.save_data()
+        self.plotter.plot_losses()
+        print(f"Training data and plots saved to {self.plotter.run_dir}")
+        logger.info(f"Training data and plots saved to {self.plotter.run_dir}")
 
     def predict(self, board):
         """

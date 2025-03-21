@@ -1,5 +1,7 @@
 myenv/
 new/
+__pycache__/
+mastergoal/__pycache__/
 ./debug.log
 ./mcts_debug2.log
 ./training.log

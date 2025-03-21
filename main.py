@@ -30,6 +30,8 @@ log = logging.getLogger(__name__)
 coloredlogs.install(level='DEBUG')  # Change this to DEBUG to see more info. #OR INFO
 
 args = dotdict({
+    'numIters': 2,
+    'numEps': 80,              # Number of complete self-play games to simulate during a new iteration. Games per Checkpoint
     'numIters': 1,
     'numEps': 30,              # Number of complete self-play games to simulate during a new iteration. Games per Checkpoint
     'tempThreshold': 30,        #
@@ -39,6 +41,10 @@ args = dotdict({
     'arenaCompare': 4,
     'cpuct': 1,
 
+    'checkpoint': './KAGGLE_17/',
+    'load_model': True,
+    'load_folder_file': ('./KAGGLE_17', 'checkpoint_0.pth.tar'),
+    'starting_iteration': 2,
     'checkpoint': './new/',
     'load_model': False,
     'load_folder_file': ('./13_03', 'checkpoint_1.pth.tar'),

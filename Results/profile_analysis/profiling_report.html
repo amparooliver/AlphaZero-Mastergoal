@@ -12,13 +12,7 @@
                 tr:nth-child(even) { background-color: #f9f9f9; }
                 .improved { color: green; }
                 .degraded { color: red; }
-                .chart { margin: 20px 0;
-                    width: 30%;
-                    height: auto;}
-                 .chart img {
-                    max-width: 100%; /* La imagen no superará el ancho del contenedor */
-                    height: auto; /* La altura se ajusta proporcionalmente */
-                    }
+                .chart { margin: 20px 0; }
             </style>
         </head>
         <body>
@@ -26,9 +20,9 @@
             <div class="section">
                 <h2>Runtime Comparison</h2>
                 <p>Baseline Total Runtime: 13662.8747 seconds</p>
-                <p>Optimized Total Runtime: 13472.6061 seconds</p>
-                <p>Improvement: <span class="improved">1.39%</span></p>
-                <p>Speedup Factor: <span class="improved">1.01x</span></p>
+                <p>Optimized Total Runtime: 12476.6925 seconds</p>
+                <p>Improvement: <span class="improved">8.68%</span></p>
+                <p>Speedup Factor: <span class="improved">1.10x</span></p>
                 <div class="chart">
                     <img src="../runtime_comparison.png" alt="Runtime Comparison Chart">
                 </div>
@@ -47,93 +41,93 @@
                     </tr>
         
                     <tr>
-                        <td>forward</td>
-                        <td>MastergoalNNet.py</td>
-                        <td>229.0785</td>
-                        <td>2.6091</td>
-                        <td class="improved">98.86%</td>
-                        <td>2080683</td>
-                    </tr>
-            
-                    <tr>
                         <td><built-in method conv2d></td>
                         <td>~</td>
                         <td>10219.7134</td>
-                        <td>10137.2499</td>
-                        <td class="improved">0.81%</td>
-                        <td>0</td>
+                        <td>9268.5190</td>
+                        <td class="improved">9.31%</td>
+                        <td>-223080</td>
+                    </tr>
+            
+                    <tr>
+                        <td>forward</td>
+                        <td>MastergoalNNet.py</td>
+                        <td>229.0785</td>
+                        <td>2.1555</td>
+                        <td class="improved">99.06%</td>
+                        <td>2074963</td>
                     </tr>
             
                     <tr>
                         <td>get_ball_position</td>
                         <td>MastergoalLogic.py</td>
                         <td>82.0268</td>
-                        <td>0.7080</td>
-                        <td class="improved">99.14%</td>
-                        <td>4590404</td>
+                        <td>0.6855</td>
+                        <td class="improved">99.16%</td>
+                        <td>4623303</td>
+                    </tr>
+            
+                    <tr>
+                        <td><built-in method batch_norm></td>
+                        <td>~</td>
+                        <td>635.2704</td>
+                        <td>563.7491</td>
+                        <td class="improved">11.26%</td>
+                        <td>-223080</td>
                     </tr>
             
                     <tr>
                         <td>getValidMoves</td>
                         <td>MastergoalLogic.py</td>
                         <td>57.8898</td>
-                        <td>9.7196</td>
-                        <td class="improved">83.21%</td>
-                        <td>0</td>
+                        <td>9.5242</td>
+                        <td class="improved">83.55%</td>
+                        <td>-5710</td>
+                    </tr>
+            
+                    <tr>
+                        <td>forward</td>
+                        <td>MastergoalNNet.py</td>
+                        <td>229.0785</td>
+                        <td>197.3376</td>
+                        <td class="improved">13.86%</td>
+                        <td>-68640</td>
                     </tr>
             
                     <tr>
                         <td>is_line_blocked</td>
                         <td>MastergoalLogic.py</td>
                         <td>41.9221</td>
-                        <td>20.8374</td>
-                        <td class="improved">50.30%</td>
-                        <td>1232181</td>
+                        <td>15.8144</td>
+                        <td class="improved">62.28%</td>
+                        <td>1137328</td>
                     </tr>
             
                     <tr>
-                        <td>_is_dunder</td>
-                        <td>enum.py</td>
-                        <td>162.9692</td>
-                        <td>143.1021</td>
-                        <td class="improved">12.19%</td>
-                        <td>47333222</td>
-                    </tr>
-            
-                    <tr>
-                        <td>__getattr__</td>
-                        <td>enum.py</td>
-                        <td>119.6702</td>
-                        <td>104.9289</td>
-                        <td class="improved">12.32%</td>
-                        <td>47333222</td>
+                        <td><built-in method relu></td>
+                        <td>~</td>
+                        <td>367.7924</td>
+                        <td>344.2658</td>
+                        <td class="improved">6.40%</td>
+                        <td>-160160</td>
                     </tr>
             
                     <tr>
                         <td>is_ball_adjacent</td>
                         <td>MastergoalLogic.py</td>
                         <td>14.6657</td>
-                        <td>1.6222</td>
-                        <td class="improved">88.94%</td>
-                        <td>0</td>
+                        <td>1.4560</td>
+                        <td class="improved">90.07%</td>
+                        <td>-96117</td>
                     </tr>
             
                     <tr>
-                        <td>is_adjacent_to_player</td>
-                        <td>MastergoalLogic.py</td>
-                        <td>52.1348</td>
-                        <td>48.9384</td>
-                        <td class="improved">6.13%</td>
-                        <td>0</td>
-                    </tr>
-            
-                    <tr>
-                        <td>performMove</td>
-                        <td>MastergoalLogic.py</td>
-                        <td>14.1766</td>
-                        <td>11.3974</td>
-                        <td class="improved">19.60%</td>
-                        <td>0</td>
+                        <td>_is_dunder</td>
+                        <td>enum.py</td>
+                        <td>162.9692</td>
+                        <td>152.5605</td>
+                        <td class="improved">6.39%</td>
+                        <td>35356828</td>
                     </tr>
             
                 </table>
@@ -222,61 +216,61 @@
                     <tr>
                         <td><built-in method builtins.exec></td>
                         <td>~</td>
-                        <td>14122.2066</td>
+                        <td>13094.2708</td>
                     </tr>
             
                     <tr>
                         <td><module></td>
                         <td>main.py</td>
-                        <td>14122.2066</td>
+                        <td>13094.2708</td>
                     </tr>
             
                     <tr>
                         <td>main</td>
                         <td>main.py</td>
-                        <td>14120.9843</td>
+                        <td>13093.0324</td>
                     </tr>
             
                     <tr>
                         <td>learn</td>
                         <td>Coach.py</td>
-                        <td>14120.7982</td>
+                        <td>13092.8541</td>
                     </tr>
             
                     <tr>
                         <td>getActionProb</td>
                         <td>MCTS.py</td>
-                        <td>12722.1113</td>
+                        <td>11704.4321</td>
                     </tr>
             
                     <tr>
                         <td>search</td>
                         <td>MCTS.py</td>
-                        <td>12718.0243</td>
+                        <td>11700.7517</td>
                     </tr>
             
                     <tr>
                         <td>executeEpisode</td>
                         <td>Coach.py</td>
-                        <td>12229.7501</td>
+                        <td>11271.4469</td>
                     </tr>
             
                     <tr>
                         <td>predict</td>
                         <td>NNet.py</td>
-                        <td>12034.5418</td>
+                        <td>11023.4656</td>
                     </tr>
             
                     <tr>
                         <td>forward</td>
                         <td>MastergoalNNet.py</td>
-                        <td>11758.4399</td>
+                        <td>10691.4349</td>
                     </tr>
             
                     <tr>
                         <td>forward</td>
                         <td>MastergoalNNet.py</td>
-                        <td>11388.6184</td>
+                        <td>10358.3105</td>
                     </tr>
             
             </table>
@@ -298,11 +292,11 @@
                     <tr>
                         <td>total_loss</td>
                         <td>62</td>
-                        <td>62</td>
-                        <td class="degraded">0.0%</td>
+                        <td>18</td>
+                        <td class="improved">70.96774193548387%</td>
                         <td>3.657657</td>
-                        <td>3.657657</td>
-                        <td class="degraded">0.0%</td>
+                        <td>3.556920</td>
+                        <td class="improved">2.7541380948907146%</td>
                     </tr>
                 
                 </table>
@@ -321,8 +315,8 @@
                     <tr>
                         <td>total_loss</td>
                         <td>0.000207</td>
-                        <td>0.000210</td>
-                        <td class="improved">1.412262854059132%</td>
+                        <td>0.000225</td>
+                        <td class="improved">8.461045392189881%</td>
                     </tr>
                 
                 </table>
@@ -332,9 +326,8 @@
                 <h2>Conclusion</h2>
                 <p>Overall assessment of the optimization impact:</p>
         
-                <p>The optimizations have resulted in a <span class="improved">
-                minimal performance change of 1.39%</span> 
-                in total runtime, with a speedup factor of 1.01x.</p>
+                <p>The optimizations have resulted in a <span class="improved">moderate performance improvement of 8.68%</span> 
+                in total runtime, with a speedup factor of 1.10x.</p>
             
             </div>
         </body>

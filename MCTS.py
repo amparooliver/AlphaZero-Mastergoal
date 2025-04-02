@@ -8,18 +8,6 @@ EPS = 1e-8
 
 log = logging.getLogger(__name__)
 
-# A dedicated logger for MCTS debugging
-#debug_log = logging.getLogger('MCTS_Debug')
-#debug_log.setLevel(logging.DEBUG)
-#debug_log.propagate = False  # Prevent propagation to other loggers
-
-# Configuration
-#file_handler = logging.FileHandler('mcts_debug2.log')
-#file_handler.setLevel(logging.DEBUG)
-#formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
-#file_handler.setFormatter(formatter)
-#debug_log.addHandler(file_handler)
-
 class TreeLevel():
     """
     Holds all the nodes at a certain tree depth.
@@ -57,37 +45,53 @@ class MCTS():
         # Perform MCTS simulations
         for i in range(self.args.numMCTSSims):
             self.search(canonicalBoard)
-            #debug_log.debug("SIMULATION DONE")
 
         # Serialize the board state
         s = self.game.stringRepresentation(canonicalBoard)  
         # Track the current depth of the tree
         depth = canonicalBoard.move_count  
-
-        # Retrieve visit counts for each action
-        counts = [self.nodes[depth].Nsa[(s, a)] if (s, a) in self.nodes[depth].Nsa else 0 for a in range(self.game.getActionSize())]
-        #debug_log.debug(f"Counts: {counts}")
-
+        
+        # Get action size once
+        action_size = self.game.getActionSize()
+        
+        # Create a NumPy array to store counts for vectorization
+        counts = np.zeros(action_size, dtype=np.float32)
+        
+        # Use vectorized operations where possible
+        for a in range(action_size):
+            if (s, a) in self.nodes[depth].Nsa:
+                counts[a] = self.nodes[depth].Nsa[(s, a)]
+        
         # Discard the previous depth's nodes to save memory
         if (depth - 1) in self.nodes:
             del self.nodes[depth - 1]
 
         # Return a deterministic policy if temp == 0 (select most visited action)
         if temp == 0:
-            bestAs = np.array(np.argwhere(counts == np.max(counts))).flatten()
-            bestA = np.random.choice(bestAs)
-            probs = [0] * len(counts)
-            #debug_log.debug(f"PROBS BEFORE: {probs}")
-            probs[bestA] = 1
-            #debug_log.debug(f"PROBS AFTER: {probs}")
-            return probs
+            max_count = np.max(counts)
+            if max_count > 0:
+                # Use NumPy to find indices of maximum values
+                bestAs = np.where(counts == max_count)[0]
+                bestA = np.random.choice(bestAs)
+                probs = np.zeros(action_size)
+                probs[bestA] = 1
+                return probs
+            else:
+                # If no moves were visited, return uniform probabilities
+                return np.ones(action_size) / action_size
 
         # Compute a probabilistic policy based on visit counts
-        counts = [x ** (1. / temp) for x in counts]
-        counts_sum = float(sum(counts))
-        probs = [x / counts_sum for x in counts]
+        if temp != 1:
+            counts = np.power(counts, 1.0 / temp)
+        
+        # Handle the case when all counts are zero
+        counts_sum = np.sum(counts)
+        if counts_sum > 0:
+            probs = counts / counts_sum
+        else:
+            # Uniform distribution if no visits
+            probs = np.ones(action_size) / action_size
 
-        #debug_log.debug(f"PROBS NON DETERMINISTIC: {probs}")
         return probs
 
     def search(self, canonicalBoard):
@@ -103,30 +107,26 @@ class MCTS():
         s = self.game.stringRepresentation(canonicalBoard)  # Serialize the board state
         depth = canonicalBoard.move_count  # Track tree depth based on move count
 
-        # Log state information
-        #debug_log.debug(f"A. State:  \n{s}") 
-        #debug_log.debug(f"B. Depth: {depth}")
         # Check if the game has ended for this state
         if s not in self.nodes[depth].Es:
             self.nodes[depth].Es[s] = self.game.getGameEnded(canonicalBoard, 1)
         if self.nodes[depth].Es[s] != 0:
             # Return the game's result if it's a terminal state
-            #debug_log.debug(f"Terminal State: {self.nodes[depth].Es[s]}")
             return -self.nodes[depth].Es[s]
 
         # Expand the tree at a leaf node
         if s not in self.nodes[depth].Ps:
             # Query the neural network for policy (P) and value (v)
             self.nodes[depth].Ps[s], v = self.nnet.predict(canonicalBoard)
-            #debug_log.debug(f"C. Policy: {self.nodes[depth].Ps[s]}, Value: {v}")
             valids = self.game.getValidMoves(canonicalBoard, 1)  # Get valid moves for the state
+            
+            # Vectorized masking of invalid moves
             self.nodes[depth].Ps[s] = self.nodes[depth].Ps[s] * valids  # Mask invalid moves
 
             sum_Ps_s = np.sum(self.nodes[depth].Ps[s])
             if sum_Ps_s > 0:
                 self.nodes[depth].Ps[s] /= sum_Ps_s  # Normalize the policy
             else:
-                # Handle edge case where no valid moves are available
                 log.error("All valid moves were masked, normalizing equally.")
                 self.nodes[depth].Ps[s] = self.nodes[depth].Ps[s] + valids
                 self.nodes[depth].Ps[s] /= np.sum(self.nodes[depth].Ps[s])
@@ -135,32 +135,38 @@ class MCTS():
             self.nodes[depth].Ns[s] = 0  # Initialize visit count for the state
             return -v
 
-        # Select the action with the highest Upper Confidence Bound (UCB)
-
+        # Vectorized UCB calculation
         valids = self.nodes[depth].Vs[s]  # Retrieve valid moves
-        cur_best = -float('inf')  # Track the best UCB value
-        best_act = -1  # Track the best action
-
-        for a in range(self.game.getActionSize()):
+        action_size = self.game.getActionSize()
+        
+        # Create arrays for UCB calculation
+        ucb_values = np.zeros(action_size)
+        
+        # The policy values for all actions at state s
+        policy = self.nodes[depth].Ps[s]
+        
+        # The exploration term constant
+        cpuct = self.args.cpuct
+        
+        # Calculate the exploration base (sqrt of total visits)
+        sqrt_total_visits = math.sqrt(self.nodes[depth].Ns[s])
+        
+        for a in range(action_size):
             if valids[a]:
-
                 if (s, a) in self.nodes[depth].Qsa:
-                    # Use the Q-value and exploration term for visited actions
-                    u = self.nodes[depth].Qsa[(s, a)] + self.args.cpuct * self.nodes[depth].Ps[s][a] * math.sqrt(self.nodes[depth].Ns[s]) / (
-                            1 + self.nodes[depth].Nsa[(s, a)])
+                    # Exploitation + exploration for visited nodes
+                    q_value = self.nodes[depth].Qsa[(s, a)]
+                    n_visits = self.nodes[depth].Nsa[(s, a)]
+                    ucb_values[a] = q_value + cpuct * policy[a] * sqrt_total_visits / (1 + n_visits)
                 else:
-                    # Exploration term for unvisited actions (Q = 0 initially)
-                    u = self.args.cpuct * self.nodes[depth].Ps[s][a] * math.sqrt(self.nodes[depth].Ns[s] + EPS)
-
-                if u > cur_best:
-                    cur_best = u
-                    best_act = a
-
-                # Log UCB values
-                #debug_log.debug(f"D. Action: {a}, UCB: {u}, Q-value: {self.nodes[depth].Qsa.get((s, a), 0)}, Nsa: {self.nodes[depth].Nsa.get((s, a), 0)}")
-
-        # Log best action
-        #debug_log.debug(f"Best Action: {best_act}, UCB: {cur_best}")
+                    # Pure exploration for unvisited nodes
+                    ucb_values[a] = cpuct * policy[a] * sqrt_total_visits
+            else:
+                # Invalid moves get -infinity
+                ucb_values[a] = -float('inf')
+                
+        # Find the best action (argmax)
+        best_act = np.argmax(ucb_values)
 
         # Execute the chosen action and recurse
         a = best_act
@@ -172,9 +178,10 @@ class MCTS():
 
         # Update Qsa, Nsa, and Ns for the current state-action pair
         if (s, a) in self.nodes[depth].Qsa:
-            self.nodes[depth].Qsa[(s, a)] = (self.nodes[depth].Nsa[(s, a)] * self.nodes[depth].Qsa[(s, a)] + v) / (self.nodes[depth].Nsa[(s, a)] + 1)
-            #debug_log.debug(f"a: {a}, updated Q vale formula: ( {self.nodes[depth].Nsa[(s, a)]} * {self.nodes[depth].Qsa[(s, a)] + v} ) / {self.nodes[depth].Nsa[(s, a)]} + 1")
-
+            # Vectorized update rule
+            n_visits = self.nodes[depth].Nsa[(s, a)]
+            q_value = self.nodes[depth].Qsa[(s, a)]
+            self.nodes[depth].Qsa[(s, a)] = (n_visits * q_value + v) / (n_visits + 1)   
             self.nodes[depth].Nsa[(s, a)] += 1
         else:
             self.nodes[depth].Qsa[(s, a)] = v

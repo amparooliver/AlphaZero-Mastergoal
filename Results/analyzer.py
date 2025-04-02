@@ -315,7 +315,7 @@ class ProfilerComparison:
                 <p>Improvement: <span class="improved">{self.results["runtime_comparison"]["improvement_percentage"]:.2f}%</span></p>
                 <p>Speedup Factor: <span class="improved">{self.results["runtime_comparison"]["speedup_factor"]:.2f}x</span></p>
                 <div class="chart">
-                    <img src="runtime_comparison.png" alt="Runtime Comparison Chart">
+                    <img src="../runtime_comparison.png" alt="Runtime Comparison Chart">
                 </div>
             </div>
             

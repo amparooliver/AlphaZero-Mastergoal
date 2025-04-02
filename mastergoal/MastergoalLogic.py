@@ -36,6 +36,10 @@ class MastergoalBoard():
         self.goals_to_win = 1
         self.move_count = 0
 
+        # Track ball
+        self.ball_row = 7
+        self.ball_col = 5
+
     def encode(self):
         # Crea un array de ceros con shape (5, 15, 11)
         board = np.zeros((NUM_PLANES, self.rows, self.cols))
@@ -71,106 +75,90 @@ class MastergoalBoard():
 
     def getValidMoves(self):
         moves = np.zeros((16, 33), dtype=bool)
-        for row in range(self.rows):
-            for col in range(self.cols):
-                if self.pieces[row][col] == 1:
-                    self.addPlayerMoves(moves, row, col)
-        '''
-        # Log readable moves
-        valid_moves_list = []
-        for move_index in range(16):
-            for kick_index in range(33):
-                if moves[move_index][kick_index]:
-                    piece_move = self.decode_move(move_index)
-                    ball_kick = self.decode_kick(kick_index)
-                    valid_moves_list.append((piece_move, ball_kick))
-        print(f"Valid moves (decoded): {valid_moves_list}")
-        '''
+        player_positions = np.where(self.pieces == 1)
+        for i in range(len(player_positions[0])):
+            row, col = player_positions[0][i], player_positions[1][i]
+            self.addPlayerMoves(moves, row, col)
         return moves
 
     def addPlayerMoves(self, moves, row, col):
-        for dr in [-2, -1, 0, 1, 2]:
-                    for dc in [-2, -1, 0, 1, 2]:
-                        if dr == 0 and dc == 0:
-                            continue
-                        new_row, new_col = row + dr, col + dc
-                        if self.is_valid_move(new_row, new_col, row, col):
+        # Generate all potential moves in a vectorized way
+        dr = np.array([-2, -2, -2, -1, -1, -1, 0, 0, 0, 0, 1, 1, 1, 2, 2, 2])
+        dc = np.array([-2, 0, 2, -1, 0, 1, -2, -1, 1, 2, -1, 0, 1, -2, 0, 2])
+        
+        # Filter out (0,0)
+        mask = ~((dr == 0) & (dc == 0))
+        dr, dc = dr[mask], dc[mask]
+        
+        new_rows = row + dr
+        new_cols = col + dc
+        
+        for i in range(len(new_rows)):
+            new_row, new_col = new_rows[i], new_cols[i]
+            if self.is_valid_move(new_row, new_col, row, col):
+                move_index = self.encode_move(row, col, new_row, new_col)
+                
+                if self.is_ball_adjacent(new_row, new_col):
+                    self.addBallKicks(moves, move_index, new_row, new_col)
+                else:
+                    moves[move_index][32] = True
 
-                            move_index = self.encode_move(row, col, new_row, new_col)
-
-                            if self.is_ball_adjacent(new_row, new_col):
-
-                                # Player must kick the ball
-                                self.addBallKicks(moves, move_index, new_row,new_col)
-                            else:
-                                # Player just moves without kicking
-                                moves[move_index][32] = True # ADDED special key where ball does not move
-
-    def addBallKicks(self, moves,move_index,fpr, fpc):
+    def addBallKicks(self, moves, move_index, fpr, fpc):
         ball_row, ball_col = self.get_ball_position()
-        #print(f"Ball position found: {ball_row} , {ball_col}")
-        for dr in [-4, -3, -2, -1, 0, 1, 2, 3, 4]:
-            for dc in [-4, -3, -2, -1, 0, 1, 2, 3, 4]:
-                if dr == 0 and dc == 0:
-                    continue
-                new_row, new_col = ball_row[0] + dr, ball_col[0] + dc
-                if self.is_valid_ball_move(new_row, new_col, ball_row[0], ball_col[0],fpr, fpc):
-                    kick_index = self.encode_kick(new_row, new_col, ball_row[0], ball_col[0])
-                    moves[move_index][kick_index] = True
+        
+        # Create arrays for all possible kick directions
+        dr_values = np.arange(-4, 5)
+        dc_values = np.arange(-4, 5)
+        dr, dc = np.meshgrid(dr_values, dc_values)
+        dr = dr.flatten()
+        dc = dc.flatten()
+        
+        # Remove (0,0)
+        mask = ~((dr == 0) & (dc == 0))
+        dr, dc = dr[mask], dc[mask]
+        
+        new_rows = ball_row + dr
+        new_cols = ball_col + dc
+        
+        for i in range(len(new_rows)):
+            new_row, new_col = new_rows[i], new_cols[i]
+            if self.is_valid_ball_move(new_row, new_col, ball_row, ball_col, fpr, fpc):
+                kick_index = self.encode_kick(new_row, new_col, ball_row, ball_col)
+                moves[move_index][kick_index] = True
 
     def is_valid_move(self, row, col, start_row, start_col):
-        # Check if the move is within board boundaries
-        if not (0 < row < self.rows-1 and 0 <= col < self.cols):
-            return False
-        
-        # Check if the destination square is empty
-        if self.pieces[row][col] != Pieces.EMPTY:
-            return False
-        
-        # Check for invalid square
-        if self.is_invalid_square(row, col):
-            return False
-        
-        #Check for own corner
-        if self.is_own_corner(row, col):
-            return False
-        
-        #Check if the move jumps above ball or player
-        if self.is_line_blocked(start_row, start_col, row, col):
-            return False
-        
-        # Check diagonal, horizontal, or vertical movement
+        # Movement Type Check
         if not self.is_diagonal_hor_ver(row, col, start_row, start_col):
             return False
-        
-        # Check distance restriction (up to 2 squares)
+        # Boundary Check
+        if not (0 < row < self.rows-1 and 0 <= col < self.cols):
+            return False
+        # Empty Square Check
+        if self.pieces[row][col] != Pieces.EMPTY:
+            return False
+        # Line Blocked Check
+        if self.is_line_blocked(start_row, start_col, row, col):
+            return False       
+        # Distance Check (Just to be safe)
         row_distance = abs(row - start_row)
         col_distance = abs(col - start_col)
-        
-        # Allow moves that are within 2 squares in any direction
-        # This includes diagonal moves where row and column distances match
         if max(row_distance, col_distance) > 2:
             return False
-        
+        # Invalid Square Check
+        if self.is_invalid_square(row, col):
+            return False
+        # Own Corner Check
+        if self.is_own_corner(row, col):
+            return False
         return True
   
     def is_valid_ball_move(self, row, col, start_row, start_col, fpr, fpc):
-        # Check if the move is within board boundaries
+        # Boundary Check
         if not (0 <= row < self.rows and 0 <= col < self.cols):
-            return False
-        
-        # Check diagonal, horizontal, or vertical movement
+            return False  
+        # Movement Type Check
         if not self.is_diagonal_hor_ver(row, col, start_row, start_col):
             return False
-        
-        # Check distance restriction (up to 4 squares)
-        row_distance = abs(row - start_row)
-        col_distance = abs(col - start_col)
-        
-        # Allow moves that are within 4 squares in any direction
-        if max(row_distance, col_distance) > 4:
-            return False
-        
         # Additional existing checks
         if (not self.is_empty_space(row, col, fpr, fpc) or
             self.is_invalid_square(row, col) or
@@ -178,7 +166,11 @@ class MastergoalBoard():
             self.is_adjacent_to_player(row, col, fpr, fpc) or
             self.is_own_corner(row, col)):
             return False
-        
+        # Distance Check 4 (Just to be safe)
+        row_distance = abs(row - start_row)
+        col_distance = abs(col - start_col)
+        if max(row_distance, col_distance) > 4:
+            return False 
         return True
 
     def is_diagonal_hor_ver(self, row, col, start_row, start_col):
@@ -205,7 +197,6 @@ class MastergoalBoard():
         return False
 
     def is_invalid_square(self, row, col):
-
         return (row == 0 or row == 14) and (col <= 2 or col >= 8)
 
     def is_own_area(self, row, col):
@@ -216,59 +207,58 @@ class MastergoalBoard():
 
     def is_adjacent_to_player(self, fBallR, fBallC, fPlayerR, fPlayerC):
         boardCopy = self.pieces.copy()
-
-        # Encontrar la pieza del jugador inicial y eliminarla de la copia
+        
+        # Update board copy
         iPlayerR, iPlayerC = np.where(self.pieces == 1)
         boardCopy[iPlayerR, iPlayerC] = Pieces.EMPTY
-
-        # Agregar la pieza del jugador en la nueva posición a la copia
         boardCopy[fPlayerR, fPlayerC] = 1
-
-        # Encontrar la posición inicial de la pelota y vaciarla en la copia
-        iBallR, iBallC = self.get_ball_position()
-        boardCopy[iBallR, iBallC] = Pieces.EMPTY
-        # Verificar si la nueva posición de la pelota es adyacente a un jugador en la copia del tablero
-        for dr in [-1, 0, 1]:
-            for dc in [-1, 0, 1]:
-                if dr == 0 and dc == 0:
-                    continue
-                new_row = fBallR + dr
-                new_col = fBallC + dc
-                #print(f"PELOTA. new_row = {new_row} && new_col = {new_col}")
-                if 0 <= new_row < self.rows and 0 <= new_col < self.cols and \
-                    (boardCopy[new_row, new_col] == 1 or boardCopy[new_row, new_col] == -1 ):
-                    return True
-        return False
+        
+        # Clear the ball position in the copy
+        boardCopy[self.ball_row, self.ball_col] = Pieces.EMPTY
+        
+        # Generate all adjacent positions
+        dr = np.array([-1, -1, -1, 0, 0, 1, 1, 1])
+        dc = np.array([-1, 0, 1, -1, 1, -1, 0, 1])
+        
+        adj_rows = fBallR + dr
+        adj_cols = fBallC + dc
+        
+        # Filter positions within board boundaries
+        valid_mask = (0 <= adj_rows) & (adj_rows < self.rows) & (0 <= adj_cols) & (adj_cols < self.cols)
+        valid_rows = adj_rows[valid_mask]
+        valid_cols = adj_cols[valid_mask]
+        
+        # Check if any adjacent position contains a player
+        return np.any((boardCopy[valid_rows, valid_cols] == 1) | (boardCopy[valid_rows, valid_cols] == -1))
 
     def is_own_corner(self, row, col):
         if (row == 1 and (col == 0 or col == 10)):
             return True
-        else:
-            return False # (row == 13 and (col == 0 or col == 10)) # Same logic to area
+        return False 
 
     def is_line_blocked(self, start_row, start_col, end_row, end_col):
-        # Verifica si la línea pasa por encima de la pelota o de otro jugador
         delta_row = end_row - start_row
         delta_col = end_col - start_col
         steps = max(abs(delta_row), abs(delta_col))
-        for step in range(1, steps):
-            intermediate_row = start_row + step * delta_row // steps
-            intermediate_col = start_col + step * delta_col // steps
-            if self.pieces[intermediate_row][intermediate_col] in [Pieces.RED_PLAYER, Pieces.WHITE_PLAYER, Pieces.BALL]:
-                return True
-        return False 
+        
+        if steps <= 1:
+            return False
+        
+        # Create intermediate positions
+        intermediate_rows = np.array([start_row + step * delta_row // steps for step in range(1, steps)])
+        intermediate_cols = np.array([start_col + step * delta_col // steps for step in range(1, steps)])
+        
+        # Check if any intermediate position is occupied
+        return np.any(self.pieces[intermediate_rows, intermediate_cols] != Pieces.EMPTY)
      
     def performMove(self, action, verbose):
-
         player_move, ball_kick = self.decode_action(action)
-        #print(f"player_move {player_move} y ball_kick: {ball_kick}")
         start_row, start_col = np.where(self.pieces == 1)
         # Move player
         end_row, end_col = start_row + player_move[0], start_col + player_move[1]
         self.pieces[start_row, start_col] = Pieces.EMPTY
         self.pieces[end_row, end_col] = 1
         self.move_count += 1
-        #print(f"Move count is: {self.move_count}")
 
         # Kick ball if applicable
         if ball_kick != 32:
@@ -276,26 +266,30 @@ class MastergoalBoard():
             new_ball_row, new_ball_col = ball_row + ball_kick[0], ball_col + ball_kick[1]
             self.pieces[ball_row, ball_col] = Pieces.EMPTY
             self.pieces[new_ball_row, new_ball_col] = Pieces.BALL
+            # Update tracked ball
+            self.ball_row, self.ball_col = new_ball_row, new_ball_col
 
         # Flipping board!!!!
         # Voltear el tablero para la perspectiva del otro jugador
-
         self.pieces = -1 * self.pieces
         self.pieces = np.flipud(self.pieces)  # Voltear verticalmente
 
-        # Find any -2 values and convert them to 2
-        ball_neg_pos = np.where(self.pieces == -Pieces.BALL)
-        if len(ball_neg_pos[0]) > 0:
-            self.pieces[ball_neg_pos[0], ball_neg_pos[1]] = Pieces.BALL
+        # Since we know exactly where the ball is, directly fix the ball value
+        # after the flip and negation instead of searching
+        if self.pieces[self.rows - 1 - self.ball_row, self.ball_col] == -Pieces.BALL:
+            self.pieces[self.rows - 1 - self.ball_row, self.ball_col] = Pieces.BALL
+        
+        # Update ball position after flipping the board (both row and column)
+        self.ball_row = self.rows - 1 - self.ball_row
 
         self.red_turn = not self.red_turn
 
     def is_ball_adjacent(self, row, col):
-        ball_row, ball_col = self.get_ball_position()
-        return abs(row - ball_row) <= 1 and abs(col - ball_col) <= 1
+        return abs(row - self.ball_row) <= 1 and abs(col - self.ball_col) <= 1  
 
     def get_ball_position(self):
-        return np.where((self.pieces == Pieces.BALL) | (self.pieces == -Pieces.BALL))
+        # Return the actual scalar values, not arrays
+        return self.ball_row, self.ball_col
 
     def is_goal(self, row):
         if (row == 14): #Current player goal
@@ -316,15 +310,14 @@ class MastergoalBoard():
         self.white_goals = 0
 
     def is_game_over(self, verbose):
-        ball_row, ball_col = self.get_ball_position()
-        if self.is_goal(ball_row):
+        if self.is_goal(self.ball_row):
             if self.red_turn:
                 self.red_goals += 1
                 return -1
             else:
                 self.white_goals += 1
                 return 1
-        if (self.move_count >= 35):
+        if (self.move_count >= 40):
             # Game taking too long, calling it a draw!
             return 1e-4     
         return 0
@@ -356,9 +349,7 @@ class MastergoalBoard():
             (+4, -4): 28, (+2, +2): 29, (+3, +3): 30,
             (+4, +4): 31
         }
-        
         return kick_map[kick_vector]
-
 
     def decode_move(self, index):
         move_map = {
@@ -414,7 +405,6 @@ class MastergoalBoard():
             pieces = np.flipud(pieces)  # Voltear el tablero verticalmente
 
         # Imprimir el tablero
-        #print(f"Acaba de jugar: {'Blanco' if self.red_turn else 'Rojo'}")  # Indicar el turno del jugador
         print("  ", end="")
         for col in range(self.cols):
             print(col, end=" ")
@@ -432,23 +422,4 @@ class MastergoalBoard():
                     symbol = 'O'
                 print(symbol, end=" ")
             print("")
-        
-        #print(f"Ahora es el turno del jugador: {'Rojo' if self.red_turn else 'Blanco'}")  # Indicar el turno del jugador
-
-    # Example in MastergoalBoard
-    def update_web_board(self):
-        try:
-            board_state = self.pieces.copy()  # Get a copy of the board
-            if self.red_turn:  # Adjust orientation for the red player's turn
-                board_state = -1 * board_state
-                board_state = np.flipud(board_state)
-            board_state = board_state.tolist()  # Convert to JSON-serializable format
-            response = requests.post(
-                "http://127.0.0.1:5000/update_board",
-                json={"board": board_state}
-            )
-            if response.status_code != 200:
-                print("Failed to update web board:", response.text)
-        except Exception as e:
-            print(f"Error updating web board: {e}")
         

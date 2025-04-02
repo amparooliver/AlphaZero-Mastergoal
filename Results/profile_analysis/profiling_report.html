@@ -1,0 +1,342 @@
+
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Python Project Performance Comparison</title>
+            <style>
+                body { font-family: Arial, sans-serif; margin: 20px; }
+                .section { margin-bottom: 30px; }
+                table { border-collapse: collapse; width: 100%; }
+                th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+                th { background-color: #f2f2f2; }
+                tr:nth-child(even) { background-color: #f9f9f9; }
+                .improved { color: green; }
+                .degraded { color: red; }
+                .chart { margin: 20px 0;
+                    width: 30%;
+                    height: auto;}
+                 .chart img {
+                    max-width: 100%; /* La imagen no superará el ancho del contenedor */
+                    height: auto; /* La altura se ajusta proporcionalmente */
+                    }
+            </style>
+        </head>
+        <body>
+            <h1>Performance Optimization Analysis Report</h1>
+            <div class="section">
+                <h2>Runtime Comparison</h2>
+                <p>Baseline Total Runtime: 13662.8747 seconds</p>
+                <p>Optimized Total Runtime: 13472.6061 seconds</p>
+                <p>Improvement: <span class="improved">1.39%</span></p>
+                <p>Speedup Factor: <span class="improved">1.01x</span></p>
+                <div class="chart">
+                    <img src="../runtime_comparison.png" alt="Runtime Comparison Chart">
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2>Top Function Improvements</h2>
+                <table>
+                    <tr>
+                        <th>Function</th>
+                        <th>File</th>
+                        <th>Baseline Time (s)</th>
+                        <th>Optimized Time (s)</th>
+                        <th>Improvement (%)</th>
+                        <th>Calls Difference</th>
+                    </tr>
+        
+                    <tr>
+                        <td>forward</td>
+                        <td>MastergoalNNet.py</td>
+                        <td>229.0785</td>
+                        <td>2.6091</td>
+                        <td class="improved">98.86%</td>
+                        <td>2080683</td>
+                    </tr>
+            
+                    <tr>
+                        <td><built-in method conv2d></td>
+                        <td>~</td>
+                        <td>10219.7134</td>
+                        <td>10137.2499</td>
+                        <td class="improved">0.81%</td>
+                        <td>0</td>
+                    </tr>
+            
+                    <tr>
+                        <td>get_ball_position</td>
+                        <td>MastergoalLogic.py</td>
+                        <td>82.0268</td>
+                        <td>0.7080</td>
+                        <td class="improved">99.14%</td>
+                        <td>4590404</td>
+                    </tr>
+            
+                    <tr>
+                        <td>getValidMoves</td>
+                        <td>MastergoalLogic.py</td>
+                        <td>57.8898</td>
+                        <td>9.7196</td>
+                        <td class="improved">83.21%</td>
+                        <td>0</td>
+                    </tr>
+            
+                    <tr>
+                        <td>is_line_blocked</td>
+                        <td>MastergoalLogic.py</td>
+                        <td>41.9221</td>
+                        <td>20.8374</td>
+                        <td class="improved">50.30%</td>
+                        <td>1232181</td>
+                    </tr>
+            
+                    <tr>
+                        <td>_is_dunder</td>
+                        <td>enum.py</td>
+                        <td>162.9692</td>
+                        <td>143.1021</td>
+                        <td class="improved">12.19%</td>
+                        <td>47333222</td>
+                    </tr>
+            
+                    <tr>
+                        <td>__getattr__</td>
+                        <td>enum.py</td>
+                        <td>119.6702</td>
+                        <td>104.9289</td>
+                        <td class="improved">12.32%</td>
+                        <td>47333222</td>
+                    </tr>
+            
+                    <tr>
+                        <td>is_ball_adjacent</td>
+                        <td>MastergoalLogic.py</td>
+                        <td>14.6657</td>
+                        <td>1.6222</td>
+                        <td class="improved">88.94%</td>
+                        <td>0</td>
+                    </tr>
+            
+                    <tr>
+                        <td>is_adjacent_to_player</td>
+                        <td>MastergoalLogic.py</td>
+                        <td>52.1348</td>
+                        <td>48.9384</td>
+                        <td class="improved">6.13%</td>
+                        <td>0</td>
+                    </tr>
+            
+                    <tr>
+                        <td>performMove</td>
+                        <td>MastergoalLogic.py</td>
+                        <td>14.1766</td>
+                        <td>11.3974</td>
+                        <td class="improved">19.60%</td>
+                        <td>0</td>
+                    </tr>
+            
+                </table>
+            </div>
+            
+            <div class="section">
+                <h2>Hotspot Analysis</h2>
+                <h3>Baseline Top Hotspots</h3>
+                <table>
+                    <tr>
+                        <th>Function</th>
+                        <th>File</th>
+                        <th>Cumulative Time (s)</th>
+                    </tr>
+        
+                    <tr>
+                        <td><built-in method builtins.exec></td>
+                        <td>~</td>
+                        <td>14281.7853</td>
+                    </tr>
+            
+                    <tr>
+                        <td><module></td>
+                        <td>main.py</td>
+                        <td>14281.7853</td>
+                    </tr>
+            
+                    <tr>
+                        <td>main</td>
+                        <td>main.py</td>
+                        <td>14278.1161</td>
+                    </tr>
+            
+                    <tr>
+                        <td>learn</td>
+                        <td>Coach.py</td>
+                        <td>14277.9230</td>
+                    </tr>
+            
+                    <tr>
+                        <td>getActionProb</td>
+                        <td>MCTS.py</td>
+                        <td>12959.0248</td>
+                    </tr>
+            
+                    <tr>
+                        <td>search</td>
+                        <td>MCTS.py</td>
+                        <td>12955.1435</td>
+                    </tr>
+            
+                    <tr>
+                        <td>executeEpisode</td>
+                        <td>Coach.py</td>
+                        <td>12518.7709</td>
+                    </tr>
+            
+                    <tr>
+                        <td>predict</td>
+                        <td>NNet.py</td>
+                        <td>12120.0756</td>
+                    </tr>
+            
+                    <tr>
+                        <td>forward</td>
+                        <td>MastergoalNNet.py</td>
+                        <td>11811.5384</td>
+                    </tr>
+            
+                    <tr>
+                        <td>forward</td>
+                        <td>MastergoalNNet.py</td>
+                        <td>11451.6022</td>
+                    </tr>
+            
+                </table>
+                
+                <h3>Optimized Top Hotspots</h3>
+                <table>
+                    <tr>
+                        <th>Function</th>
+                        <th>File</th>
+                        <th>Cumulative Time (s)</th>
+                    </tr>
+        
+                    <tr>
+                        <td><built-in method builtins.exec></td>
+                        <td>~</td>
+                        <td>14122.2066</td>
+                    </tr>
+            
+                    <tr>
+                        <td><module></td>
+                        <td>main.py</td>
+                        <td>14122.2066</td>
+                    </tr>
+            
+                    <tr>
+                        <td>main</td>
+                        <td>main.py</td>
+                        <td>14120.9843</td>
+                    </tr>
+            
+                    <tr>
+                        <td>learn</td>
+                        <td>Coach.py</td>
+                        <td>14120.7982</td>
+                    </tr>
+            
+                    <tr>
+                        <td>getActionProb</td>
+                        <td>MCTS.py</td>
+                        <td>12722.1113</td>
+                    </tr>
+            
+                    <tr>
+                        <td>search</td>
+                        <td>MCTS.py</td>
+                        <td>12718.0243</td>
+                    </tr>
+            
+                    <tr>
+                        <td>executeEpisode</td>
+                        <td>Coach.py</td>
+                        <td>12229.7501</td>
+                    </tr>
+            
+                    <tr>
+                        <td>predict</td>
+                        <td>NNet.py</td>
+                        <td>12034.5418</td>
+                    </tr>
+            
+                    <tr>
+                        <td>forward</td>
+                        <td>MastergoalNNet.py</td>
+                        <td>11758.4399</td>
+                    </tr>
+            
+                    <tr>
+                        <td>forward</td>
+                        <td>MastergoalNNet.py</td>
+                        <td>11388.6184</td>
+                    </tr>
+            
+            </table>
+            </div>
+            
+            <div class="section">
+                <h2>Training Metrics Comparison</h2>
+                <table>
+                    <tr>
+                        <th>Metric</th>
+                        <th>Baseline Epochs to Converge</th>
+                        <th>Optimized Epochs to Converge</th>
+                        <th>Convergence Improvement</th>
+                        <th>Baseline Final Value</th>
+                        <th>Optimized Final Value</th>
+                        <th>Final Value Improvement</th>
+                    </tr>
+            
+                    <tr>
+                        <td>total_loss</td>
+                        <td>62</td>
+                        <td>62</td>
+                        <td class="degraded">0.0%</td>
+                        <td>3.657657</td>
+                        <td>3.657657</td>
+                        <td class="degraded">0.0%</td>
+                    </tr>
+                
+                </table>
+            </div>
+            
+            <div class="section">
+                <h2>Efficiency Metrics</h2>
+                <table>
+                    <tr>
+                        <th>Metric</th>
+                        <th>Baseline Efficiency</th>
+                        <th>Optimized Efficiency</th>
+                        <th>Improvement</th>
+                    </tr>
+            
+                    <tr>
+                        <td>total_loss</td>
+                        <td>0.000207</td>
+                        <td>0.000210</td>
+                        <td class="improved">1.412262854059132%</td>
+                    </tr>
+                
+                </table>
+            </div>
+            
+            <div class="section">
+                <h2>Conclusion</h2>
+                <p>Overall assessment of the optimization impact:</p>
+        
+                <p>The optimizations have resulted in a <span class="improved">
+                minimal performance change of 1.39%</span> 
+                in total runtime, with a speedup factor of 1.01x.</p>
+            
+            </div>
+        </body>
+        </html>
+        

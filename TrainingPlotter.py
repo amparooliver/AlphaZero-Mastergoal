@@ -1,7 +1,9 @@
 import os
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
+# Force matplotlib to use the 'agg' backend (for non-interactive plotting)
+os.environ['MPLBACKEND'] = 'agg'
+import matplotlib.pyplot as plt  # This import should now use the 'agg' backend
 from datetime import datetime
 
 class TrainingPlotter:

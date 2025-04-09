@@ -142,6 +142,30 @@ class NNetWrapper(NeuralNet):
 
         return torch.exp(pi).data.cpu().numpy()[0], v.data.cpu().numpy()[0]  # Convert predictions to NumPy
 
+    def predict_batch(self, boards_batch):
+        """
+        Predict policy and value for a batch of boards.
+        Args:
+            boards_batch: List of board states
+        Returns:
+            pi_batch: Batch of action probabilities
+            v_batch: Batch of estimated state values
+        """
+        start = time.time()
+        
+        # Convert to tensors
+        batch = torch.FloatTensor(np.array([b.encode().astype(np.float32) for b in boards_batch]))
+        
+        if args.cuda:
+            batch = batch.cuda(non_blocking=True)
+        
+        # Set model to evaluation mode and disable gradient computation
+        self.model.eval()
+        with torch.no_grad():
+            pi_batch, v_batch = self.model(batch)
+        
+        return torch.exp(pi_batch).cpu().numpy(), v_batch.cpu().numpy()
+
     def loss_pi(self, targets, outputs):
         """
         Compute the policy loss (cross-entropy).

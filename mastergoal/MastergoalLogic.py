@@ -41,29 +41,20 @@ class MastergoalBoard():
         self.ball_col = 5
 
     def encode(self):
-        # Crea un array de ceros con shape (5, 15, 11)
+        # Create a zeros array with shape (5, 15, 11)
         board = np.zeros((NUM_PLANES, self.rows, self.cols))
-
-        # Iteramos sobre el tablero para colocar cada pieza en la capa correcta
-        for r in range(self.rows):
-            for c in range(self.cols):
-                piece = self.pieces[r, c]
-                if piece == Pieces.WHITE_PLAYER:
-                    board[PLAYER_PIECE_LAYER, r, c] = 1
-                elif piece == Pieces.RED_PLAYER:
-                    board[OPPONENT_PIECE_LAYER, r, c] = 1
-                elif abs(piece) == Pieces.BALL:
-                    board[BALL_LAYER, r, c] = 1
-
-        # Capa del jugador en turno (1 para blanco, -1 para rojo)
-        if not self.red_turn:
-            board[PLAYER_LAYER, :, :] = 1
-        else:
-            board[PLAYER_LAYER, :, :] = -1
-
-        # Capa de conteo de movimientos (rellena todo con el número de movimientos actual)
-        board[MOVE_COUNT_LAYER, :, :] = self.move_count
-
+        
+        # Use boolean masks to fill in the layers
+        board[PLAYER_PIECE_LAYER] = (self.pieces == Pieces.WHITE_PLAYER)
+        board[OPPONENT_PIECE_LAYER] = (self.pieces == Pieces.RED_PLAYER)
+        board[BALL_LAYER] = (abs(self.pieces) == Pieces.BALL)
+        
+        # Player turn layer (1 for white, -1 for red)
+        board[PLAYER_LAYER] = 1 if not self.red_turn else -1
+        
+        # Move count layer
+        board[MOVE_COUNT_LAYER] = self.move_count
+        
         return board
 
     def getInitialPieces(self):

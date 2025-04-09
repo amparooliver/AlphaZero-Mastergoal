@@ -69,9 +69,10 @@ tensorflow==2.9.1
 tensorflow-estimator==2.9.0
 tensorflow-io-gcs-filesystem==0.26.0
 termcolor==1.1.0
-torch==2.6.0+cu118
-torchaudio==2.6.0+cu118
-torchvision==0.21.0+cu118
+#torch==2.6.0+cu118
+#torchaudio==2.6.0+cu118
+#torchvision==0.21.0+cu118
+# i manually install !myenv/bin/pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
 tqdm==4.64.0
 triton==3.2.0
 typing_extensions==4.12.2

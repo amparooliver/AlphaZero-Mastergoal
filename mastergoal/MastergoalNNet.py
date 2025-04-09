@@ -23,9 +23,9 @@ class MastergoalNNet(nn.Module):
         )
 
         # 12 bloques residuales
-        self.residual_blocks = nn.Sequential()
-        for i in range(num_residual_blocks):
-            self.residual_blocks.append(ResidualBlock(intermediate_channels, intermediate_channels, kernel_size))
+        blocks = [ResidualBlock(intermediate_channels, intermediate_channels, kernel_size) 
+                for _ in range(num_residual_blocks)]
+        self.residual_blocks = nn.Sequential(*blocks)
 
         # Policy Head
         self.policy_head = nn.Sequential(
@@ -63,16 +63,21 @@ class ResidualBlock(nn.Module):
         super(ResidualBlock, self).__init__()
         self.conv1 = nn.Conv2d(input_channels, output_channels, kernel_size, stride=1, padding=1)
         self.bn1 = nn.BatchNorm2d(output_channels)
-        self.conv2 = nn.Conv2d(input_channels, output_channels, kernel_size, stride=1, padding=1)
-        self.bn2 =  nn.BatchNorm2d(output_channels)
-        self.shortcut = nn.Sequential(
-            nn.Conv2d(input_channels, output_channels, kernel_size, stride=1, padding=1),
-            nn.BatchNorm2d(output_channels)
-        )
+        self.conv2 = nn.Conv2d(output_channels, output_channels, kernel_size, stride=1, padding=1)
+        self.bn2 = nn.BatchNorm2d(output_channels)
+        
+        # Only use convolution in shortcut if dimensions change
+        if input_channels != output_channels:
+            self.shortcut = nn.Sequential(
+                nn.Conv2d(input_channels, output_channels, 1, stride=1, padding=0),
+                nn.BatchNorm2d(output_channels)
+            )
+        else:
+            self.shortcut = nn.Identity()
 
     def forward(self, x):
-        out = F.relu(self.bn1(self.conv1(x)))
+        out = F.relu(self.bn1(self.conv1(x)), inplace=True)
         out = self.bn2(self.conv2(out))
         out += self.shortcut(x)
-        out = F.relu(out)
+        out = F.relu(out, inplace=True)
         return out

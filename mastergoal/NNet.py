@@ -34,6 +34,7 @@ args = dotdict({
     'batch_size': 256,  # Batch size for training 64 normally but 128 for gpu
     'cuda': torch.cuda.is_available(),  # Check if CUDA is available for GPU usage
     'plot_dir': 'training_plots',  # Directory to save plots
+    'device': torch.device("cuda" if torch.cuda.is_available() else "cpu"),  # Device to use
 }) 
 
 
@@ -44,14 +45,14 @@ class NNetWrapper(NeuralNet):
         Args:
             game: Game instance providing board size and action space.
         """
-        self.model = model(game)  # Initialize the specific neural network
+        self.device = args.device
+        self.model = model(game).to(self.device)  # Initialize the specific neural network and move to device
         self.input_shape = game.getBoardSize()  # Input dimensions
         self.action_size = game.getActionSize()  # Number of possible actions
         self.plotter = None  # Will be initialized during training
 
         if args.cuda:
             print("Cuda AVAILABLE!")
-            self.model.cuda()  # Move the model to GPU if CUDA is available
 
 
     def train(self, examples):
@@ -74,18 +75,17 @@ class NNetWrapper(NeuralNet):
 
             batch_count = int(len(examples) / args.batch_size)  # Number of batches
             t = tqdm(range(batch_count), desc='Training Net')  # Progress bar for visualization
+            
+            # Process examples in batches to improve efficiency
             for batch_idx in t:
                 # Sample a batch of examples
                 sample_ids = np.random.randint(len(examples), size=args.batch_size)
                 boards, pis, vs = list(zip(*[examples[i] for i in sample_ids]))
 
-                # Convert to PyTorch tensors
-                boards = torch.FloatTensor(np.array(boards).astype(np.float64))
-                target_pis = torch.FloatTensor(np.array(pis))
-                target_vs = torch.FloatTensor(np.array(vs).astype(np.float64))
-
-                if args.cuda:  # Move tensors to GPU if CUDA is available
-                    boards, target_pis, target_vs = boards.contiguous().cuda(), target_pis.contiguous().cuda(), target_vs.contiguous().cuda()
+                # Convert to PyTorch tensors directly on the target device
+                boards = torch.FloatTensor(np.array(boards).astype(np.float64)).to(self.device)
+                target_pis = torch.FloatTensor(np.array(pis)).to(self.device)
+                target_vs = torch.FloatTensor(np.array(vs).astype(np.float64)).to(self.device)
 
                 # Forward pass
                 out_pi, out_v = self.model(boards)  # Predictions from the model
@@ -93,16 +93,18 @@ class NNetWrapper(NeuralNet):
                 l_v = self.loss_v(target_vs, out_v)  # Value loss
                 total_loss = l_pi + l_v  # Total loss
 
-                # Record the losses
-                pi_losses.update(l_pi.item(), boards.size(0))
-                v_losses.update(l_v.item(), boards.size(0))
+                # Record the losses - get CPU values only when needed for display
+                pi_loss_val = l_pi.item()
+                v_loss_val = l_v.item()
+                pi_losses.update(pi_loss_val, boards.size(0))
+                v_losses.update(v_loss_val, boards.size(0))
                 t.set_postfix(Loss_pi=pi_losses, Loss_v=v_losses)  # Update progress bar
 
                 # Log losses
                 logger.info(f'Loss_pi: {pi_losses.avg}, Loss_v: {v_losses.avg}')
                 
                 # Record data for plotting
-                self.plotter.record_batch(epoch + 1, batch_idx + 1, l_pi.item(), l_v.item())
+                self.plotter.record_batch(epoch + 1, batch_idx + 1, pi_loss_val, v_loss_val)
                 
                 # Backward pass and optimizer step
                 optimizer.zero_grad()
@@ -131,16 +133,20 @@ class NNetWrapper(NeuralNet):
         start = time.time()  # Start timing
 
         encoded = board.encode()  # Encode the board into a neural network-compatible format
-        s = torch.FloatTensor(encoded.astype(np.float64))  # Convert to tensor
-        if args.cuda:
-            s = s.contiguous().cuda()  # Move to GPU if necessary
-
+        
+        # Create tensor directly on the target device
+        s = torch.FloatTensor(encoded.astype(np.float64)).to(self.device)
+        
         s = s.view(1, *self.input_shape)  # Add batch dimension
         self.model.eval()  # Set the model to evaluation mode
+        
         with torch.no_grad():  # Disable gradient computation
             pi, v = self.model(s)  # Predict policy and value
+            # Only transfer back to CPU when returning
+            pi_np = torch.exp(pi).cpu().numpy()[0]
+            v_np = v.cpu().numpy()[0]
 
-        return torch.exp(pi).data.cpu().numpy()[0], v.data.cpu().numpy()[0]  # Convert predictions to NumPy
+        return pi_np, v_np
 
     def predict_batch(self, boards_batch):
         """
@@ -153,18 +159,21 @@ class NNetWrapper(NeuralNet):
         """
         start = time.time()
         
-        # Convert to tensors
-        batch = torch.FloatTensor(np.array([b.encode().astype(np.float32) for b in boards_batch]))
+        # Prepare encoded boards more efficiently
+        encoded_boards = np.array([b.encode().astype(np.float32) for b in boards_batch])
         
-        if args.cuda:
-            batch = batch.cuda(non_blocking=True)
+        # Convert to tensors directly on the target device
+        batch = torch.FloatTensor(encoded_boards).to(self.device)
         
         # Set model to evaluation mode and disable gradient computation
         self.model.eval()
         with torch.no_grad():
             pi_batch, v_batch = self.model(batch)
+            # Only transfer back to CPU when returning
+            pi_batch_np = torch.exp(pi_batch).cpu().numpy()
+            v_batch_np = v_batch.cpu().numpy()
         
-        return torch.exp(pi_batch).cpu().numpy(), v_batch.cpu().numpy()
+        return pi_batch_np, v_batch_np
 
     def loss_pi(self, targets, outputs):
         """
@@ -197,6 +206,7 @@ class NNetWrapper(NeuralNet):
         filepath = os.path.join(folder, filename)
         if not os.path.exists(filepath):
             raise Exception(f"No model in path {filepath}")
-        map_location = None if args.cuda else 'cpu'
-        checkpoint = torch.load(filepath, map_location=map_location)
+        
+        # Load directly to the correct device
+        checkpoint = torch.load(filepath, map_location=self.device)
         self.model.load_state_dict(checkpoint['state_dict'])

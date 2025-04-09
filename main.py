@@ -51,6 +51,7 @@ args = dotdict({
     'verbose': True,
 
     'mctsBatchSize': 128,
+    'cuda': True,
 })
 
 def main():

@@ -50,6 +50,7 @@ args = dotdict({
     'numItersForTrainExamplesHistory': 100,
     'verbose': True,
 
+    'mctsBatchSize': 128,
 })
 
 def main():

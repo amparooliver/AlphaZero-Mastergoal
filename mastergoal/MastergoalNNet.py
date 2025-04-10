@@ -65,15 +65,10 @@ class ResidualBlock(nn.Module):
         self.bn1 = nn.BatchNorm2d(output_channels)
         self.conv2 = nn.Conv2d(output_channels, output_channels, kernel_size, stride=1, padding=1)
         self.bn2 = nn.BatchNorm2d(output_channels)
-        
-        # Only use convolution in shortcut if dimensions change
-        if input_channels != output_channels:
-            self.shortcut = nn.Sequential(
-                nn.Conv2d(input_channels, output_channels, 1, stride=1, padding=0),
-                nn.BatchNorm2d(output_channels)
-            )
-        else:
-            self.shortcut = nn.Identity()
+        self.shortcut = nn.Sequential(
+            nn.Conv2d(input_channels, output_channels, kernel_size, stride=1, padding=1),
+            nn.BatchNorm2d(output_channels)
+        )
 
     def forward(self, x):
         out = F.relu(self.bn1(self.conv1(x)), inplace=True)

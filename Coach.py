@@ -29,6 +29,9 @@ class Coach():
         self.mcts = MCTS(self.game, self.nnet, self.args)
         self.trainExamplesHistory = []  # history of examples from args.numItersForTrainExamplesHistory latest iterations
         self.skipFirstSelfPlay = False  # can be overriden in loadTrainExamples()
+        self.episode_counter = 0  # Track episodes across iterations
+        self.episodes_since_save = 0  # Track episodes since last save
+        self.current_iteration_examples = deque([], maxlen=self.args.maxlenOfQueue)
 
     def executeEpisode(self):
         """
@@ -81,6 +84,54 @@ class Coach():
                 log.info(f"The outcome - r value: {r}")
                 return [(x[0], x[2], r * ((-1) ** (x[1] != self.curPlayer))) for x in trainExamples]
 
+    def savePartialExamples(self, iteration):
+        """Save partial examples for the current iteration"""
+        folder = self.args.checkpoint
+        if not os.path.exists(folder):
+            os.makedirs(folder)
+        filename = os.path.join(folder, f"partial_iter_{iteration}_{self.episode_counter}.examples")
+        log.info(f"Saving partial examples to {filename}")
+        with open(filename, "wb+") as f:
+            Pickler(f).dump(self.current_iteration_examples)
+        f.closed
+
+    def loadPartialExamples(self):
+        """Load any partial examples from the previous run"""
+        folder = self.args.checkpoint
+        if not os.path.exists(folder):
+            log.info("No checkpoint folder found, starting fresh")
+            return
+            
+        # Find any partial example files
+        try:
+            partial_files = [f for f in os.listdir(folder) if f.startswith(f"partial_iter_{self.args.starting_iteration}_")]
+        except:
+            log.info("No partial files found, starting fresh")
+            return
+            
+        if partial_files:
+            log.info(f"Found partial example files: {partial_files}")
+            
+            # Sort files by episode number to get the latest one
+            partial_files.sort(key=lambda x: int(x.split("_")[3].split(".")[0]))
+            latest_file = partial_files[-1]
+            latest_episode = int(latest_file.split("_")[3].split(".")[0])
+            
+            filepath = os.path.join(folder, latest_file)
+            log.info(f"Loading most recent partial examples from {filepath}")
+            
+            try:
+                with open(filepath, "rb") as f:
+                    self.current_iteration_examples = Unpickler(f).load()
+                
+                # Update episode counter to avoid regenerating the same episodes
+                self.episode_counter = latest_episode
+                log.info(f"Loaded {len(self.current_iteration_examples)} episodes from partial file")
+                log.info(f"Resuming from episode {self.episode_counter}")
+            except Exception as e:
+                log.warning(f"Error loading partial file {latest_file}: {e}")
+                self.current_iteration_examples = deque([], maxlen=self.args.maxlenOfQueue)
+
     def learn(self):
         """
         Performs numIters iterations with numEps episodes of self-play in each
@@ -90,22 +141,42 @@ class Coach():
         only if it wins >= updateThreshold fraction of games.
         """
 
+        # Check for and load partial iterations on first run
+        if not self.skipFirstSelfPlay:
+            self.loadPartialExamples()
+
         for i in range(self.args.starting_iteration, self.args.numIters + 1):
             # bookkeeping
             log.info(f'Starting Iter #{i} ...')
             # examples of the iteration
             if not self.skipFirstSelfPlay or i > 1:
-                iterationTrainExamples = deque([], maxlen=self.args.maxlenOfQueue)
-
-                for _ in tqdm(range(self.args.numEps), desc="Self Play"):
+                # Calculate how many more episodes we need to run
+                episodes_to_run = self.args.numEps - len(self.current_iteration_examples)
+                log.info(f"Need {episodes_to_run} more episodes for this iteration")
+                
+                for _ in tqdm(range(episodes_to_run), desc="Self Play"):
                     self.mcts = MCTS(self.game, self.nnet, self.args)  # reset search tree
                     episode_start_time = time.time()
-                    iterationTrainExamples += self.executeEpisode()
+                    self.current_iteration_examples += self.executeEpisode()
+                    self.episode_counter += 1
+                    self.episodes_since_save += 1
                     episode_end_time = time.time()
-                    log.info(f"Game done in {round((episode_end_time - episode_start_time) * 1000)}ms")
+                    log.info(f"Game {self.episode_counter} done in {round((episode_end_time - episode_start_time) * 1000)}ms")
+                    
+                    # Save partial examples every X episodes
+                    if self.episodes_since_save >= self.args.saveFrequency:
+                        self.savePartialExamples(i)
+                        self.episodes_since_save = 0
 
                 # save the iteration examples to the history 
-                self.trainExamplesHistory.append(iterationTrainExamples)
+                self.trainExamplesHistory.append(list(self.current_iteration_examples))
+                
+                # Clean up any partial files for this iteration as we've completed it
+                self.cleanupPartialFiles(i)
+                
+                # Reset for next iteration
+                self.current_iteration_examples = deque([], maxlen=self.args.maxlenOfQueue)
+                self.episodes_since_save = 0
 
             if len(self.trainExamplesHistory) > self.args.numItersForTrainExamplesHistory:
                 log.warning(
@@ -150,6 +221,17 @@ class Coach():
                 log.info(f'SAVING CHECKPOINT: {self.getCheckpointFile(i)}')
                 self.nnet.save_checkpoint(folder=self.args.checkpoint, filename=self.getCheckpointFile(i))
 
+    def cleanupPartialFiles(self, iteration):
+        """Remove all partial files for the completed iteration"""
+        folder = self.args.checkpoint
+        partial_files = [f for f in os.listdir(folder) if f.startswith(f"partial_iter_{iteration}_")]
+        
+        for file in partial_files:
+            try:
+                os.remove(os.path.join(folder, file))
+                log.info(f"Removed partial file {file}")
+            except Exception as e:
+                log.warning(f"Error removing partial file {file}: {e}")
 
     def getCheckpointFile(self, iteration):
         return 'checkpoint_' + str(iteration) + '.pth.tar'

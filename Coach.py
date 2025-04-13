@@ -29,9 +29,9 @@ class Coach():
         self.mcts = MCTS(self.game, self.nnet, self.args)
         self.trainExamplesHistory = []  # history of examples from args.numItersForTrainExamplesHistory latest iterations
         self.skipFirstSelfPlay = False  # can be overriden in loadTrainExamples()
-        self.episode_counter = 0  # Track episodes across iterations
-        self.episodes_since_save = 0  # Track episodes since last save
-        self.current_iteration_examples = deque([], maxlen=self.args.maxlenOfQueue)
+        self.episode_counter = 0  # Track complete games across iterations
+        self.episodes_since_save = 0  # Track games since last save
+        self.current_iteration_games = []  # List to store complete games for current iteration
 
     def executeEpisode(self):
         """
@@ -89,10 +89,18 @@ class Coach():
         folder = self.args.checkpoint
         if not os.path.exists(folder):
             os.makedirs(folder)
+        
+        # Save the number of completed games along with the examples
+        save_data = {
+            'games': self.current_iteration_games,
+            'games_completed': self.episode_counter,
+            'checkpoint_id': self.episode_counter
+        }
+        
         filename = os.path.join(folder, f"partial_iter_{iteration}_{self.episode_counter}.examples")
-        log.info(f"Saving partial examples to {filename}")
+        log.info(f"Saving partial examples to {filename} with {len(self.current_iteration_games)} games completed")
         with open(filename, "wb+") as f:
-            Pickler(f).dump(self.current_iteration_examples)
+            Pickler(f).dump(save_data)
         f.closed
 
     def loadPartialExamples(self):
@@ -122,15 +130,22 @@ class Coach():
             
             try:
                 with open(filepath, "rb") as f:
-                    self.current_iteration_examples = Unpickler(f).load()
+                    save_data = Unpickler(f).load()
+                    
+                    # Extract data based on format (for backward compatibility)
+                    if isinstance(save_data, dict):
+                        self.current_iteration_games = save_data['games']
+                        self.episode_counter = save_data['games_completed']
+                    else:
+                        # Old format - just a list of examples
+                        self.current_iteration_games = save_data
+                        self.episode_counter = latest_episode
                 
-                # Update episode counter to avoid regenerating the same episodes
-                self.episode_counter = latest_episode
-                log.info(f"Loaded {len(self.current_iteration_examples)} episodes from partial file")
-                log.info(f"Resuming from episode {self.episode_counter}")
+                log.info(f"Loaded {len(self.current_iteration_games)} games from partial file")
+                log.info(f"Resuming from game {self.episode_counter}")
             except Exception as e:
                 log.warning(f"Error loading partial file {latest_file}: {e}")
-                self.current_iteration_examples = deque([], maxlen=self.args.maxlenOfQueue)
+                self.current_iteration_games = []
 
     def learn(self):
         """
@@ -150,14 +165,18 @@ class Coach():
             log.info(f'Starting Iter #{i} ...')
             # examples of the iteration
             if not self.skipFirstSelfPlay or i > 1:
-                # Calculate how many more episodes we need to run
-                episodes_to_run = self.args.numEps - len(self.current_iteration_examples)
-                log.info(f"Need {episodes_to_run} more episodes for this iteration")
+                # Calculate how many more games we need to run
+                games_to_run = self.args.numEps - len(self.current_iteration_games)
+                log.info(f"Need {games_to_run} more games for this iteration")
                 
-                for _ in tqdm(range(episodes_to_run), desc="Self Play"):
+                for _ in tqdm(range(games_to_run), desc="Self Play"):
                     self.mcts = MCTS(self.game, self.nnet, self.args)  # reset search tree
                     episode_start_time = time.time()
-                    self.current_iteration_examples += self.executeEpisode()
+                    
+                    # Execute a complete game and add to our collection
+                    game_examples = self.executeEpisode()
+                    self.current_iteration_games.append(game_examples)
+                    
                     self.episode_counter += 1
                     self.episodes_since_save += 1
                     episode_end_time = time.time()
@@ -168,14 +187,19 @@ class Coach():
                         self.savePartialExamples(i)
                         self.episodes_since_save = 0
 
-                # save the iteration examples to the history 
-                self.trainExamplesHistory.append(list(self.current_iteration_examples))
+                # Now that we have all games for this iteration, add them to the training history
+                # First, flatten the examples from all games into one list
+                iteration_examples = []
+                for game in self.current_iteration_games:
+                    iteration_examples.extend(game)
+                
+                self.trainExamplesHistory.append(iteration_examples)
                 
                 # Clean up any partial files for this iteration as we've completed it
                 self.cleanupPartialFiles(i)
                 
                 # Reset for next iteration
-                self.current_iteration_examples = deque([], maxlen=self.args.maxlenOfQueue)
+                self.current_iteration_games = []
                 self.episodes_since_save = 0
 
             if len(self.trainExamplesHistory) > self.args.numItersForTrainExamplesHistory:

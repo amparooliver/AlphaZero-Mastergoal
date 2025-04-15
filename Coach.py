@@ -2,6 +2,7 @@ import logging
 import os
 import sys
 import time
+import random
 from collections import deque
 from pickle import Pickler, Unpickler
 from random import shuffle
@@ -32,6 +33,7 @@ class Coach():
         self.episode_counter = 0  # Track complete games across iterations
         self.episodes_since_save = 0  # Track games since last save
         self.current_iteration_games = []  # List to store complete games for current iteration
+        self.original_cpuct = args.cpuct if hasattr(args, 'cpuct') else 1.0
 
     def executeEpisode(self):
         """
@@ -54,6 +56,11 @@ class Coach():
         self.curPlayer = 1
         episodeStep = 0
 
+        # Add extra exploration on resumed episodes
+        if self.episode_counter > 0 and hasattr(self.mcts, 'add_dirichlet_noise'):
+            self.mcts.add_dirichlet_noise = True
+            log.info("Adding extra exploration noise for resumed episode")
+
         while True:
             episodeStep += 1
 
@@ -67,7 +74,6 @@ class Coach():
 
             temp = int(episodeStep < self.args.tempThreshold)
             
-
             pi = self.mcts.getActionProb(canonicalBoard, temp=temp)
             #print(f"Action Probabilities: {pi}")
             sym = self.game.getSymmetries(canonicalBoard, pi)
@@ -90,11 +96,13 @@ class Coach():
         if not os.path.exists(folder):
             os.makedirs(folder)
         
-        # Save the number of completed games along with the examples
+        # Save the number of completed games along with the examples and RNG state
         save_data = {
             'games': self.current_iteration_games,
             'games_completed': self.episode_counter,
-            'checkpoint_id': self.episode_counter
+            'checkpoint_id': self.episode_counter,
+            'numpy_rng_state': np.random.get_state(),
+            'python_rng_state': random.getstate()
         }
         
         filename = os.path.join(folder, f"partial_iter_{iteration}_{self.episode_counter}.examples")
@@ -136,6 +144,21 @@ class Coach():
                     if isinstance(save_data, dict):
                         self.current_iteration_games = save_data['games']
                         self.episode_counter = save_data['games_completed']
+                        
+                        # Restore RNG state if available
+                        if 'numpy_rng_state' in save_data:
+                            np.random.set_state(save_data['numpy_rng_state'])
+                            log.info("Restored NumPy RNG state")
+                        if 'python_rng_state' in save_data:
+                            random.setstate(save_data['python_rng_state'])
+                            log.info("Restored Python RNG state")
+                        
+                        # Add some randomization to ensure exploration diversity
+                        # This ensures that even with same RNG state, we'll explore differently
+                        seed_value = int(time.time() * 1000) % (2**32)
+                        np.random.seed(seed_value)
+                        random.seed(seed_value)
+                        log.info(f"Adding randomization with seed {seed_value} to ensure diverse exploration")
                     else:
                         # Old format - just a list of examples
                         self.current_iteration_games = save_data
@@ -143,6 +166,13 @@ class Coach():
                 
                 log.info(f"Loaded {len(self.current_iteration_games)} games from partial file")
                 log.info(f"Resuming from game {self.episode_counter}")
+                
+                # Also load the latest neural network checkpoint
+                checkpoint_path = os.path.join(folder, self.getCheckpointFile(self.args.starting_iteration-1))
+                if os.path.exists(checkpoint_path):
+                    log.info(f"Loading latest neural network checkpoint: {checkpoint_path}")
+                    self.nnet.load_checkpoint(folder=folder, filename=self.getCheckpointFile(self.args.starting_iteration-1))
+                
             except Exception as e:
                 log.warning(f"Error loading partial file {latest_file}: {e}")
                 self.current_iteration_games = []
@@ -169,8 +199,23 @@ class Coach():
                 games_to_run = self.args.numEps - len(self.current_iteration_games)
                 log.info(f"Need {games_to_run} more games for this iteration")
                 
+                # Add time-based variation to exploration parameters on resume
+                # This will help ensure different game trajectories
+                if len(self.current_iteration_games) > 0:
+                    # We're resuming - add some variation
+                    exploration_factor = 1.0 + 0.1 * np.sin(time.time())
+                    self.args.cpuct = self.original_cpuct * exploration_factor
+                    log.info(f"Adjusted exploration parameters: cpuct={self.args.cpuct}")
+                
                 for _ in tqdm(range(games_to_run), desc="Self Play"):
-                    self.mcts = MCTS(self.game, self.nnet, self.args)  # reset search tree
+                    # Create a new MCTS instance with some randomization
+                    self.mcts = MCTS(self.game, self.nnet, self.args)
+                    
+                    # Small exploration variance to ensure diversity
+                    if hasattr(self.mcts, 'cpuct'):
+                        noise = np.random.normal(0, 0.05)  # Small Gaussian noise
+                        self.mcts.cpuct += noise
+                    
                     episode_start_time = time.time()
                     
                     # Execute a complete game and add to our collection
@@ -201,6 +246,9 @@ class Coach():
                 # Reset for next iteration
                 self.current_iteration_games = []
                 self.episodes_since_save = 0
+                
+                # Reset cpuct to original value for next iteration
+                self.args.cpuct = self.original_cpuct
 
             if len(self.trainExamplesHistory) > self.args.numItersForTrainExamplesHistory:
                 log.warning(
@@ -248,14 +296,17 @@ class Coach():
     def cleanupPartialFiles(self, iteration):
         """Remove all partial files for the completed iteration"""
         folder = self.args.checkpoint
-        partial_files = [f for f in os.listdir(folder) if f.startswith(f"partial_iter_{iteration}_")]
-        
-        for file in partial_files:
-            try:
-                os.remove(os.path.join(folder, file))
-                log.info(f"Removed partial file {file}")
-            except Exception as e:
-                log.warning(f"Error removing partial file {file}: {e}")
+        try:
+            partial_files = [f for f in os.listdir(folder) if f.startswith(f"partial_iter_{iteration}_")]
+            
+            for file in partial_files:
+                try:
+                    os.remove(os.path.join(folder, file))
+                    log.info(f"Removed partial file {file}")
+                except Exception as e:
+                    log.warning(f"Error removing partial file {file}: {e}")
+        except Exception as e:
+            log.warning(f"Error cleaning up partial files: {e}")
 
     def getCheckpointFile(self, iteration):
         return 'checkpoint_' + str(iteration) + '.pth.tar'

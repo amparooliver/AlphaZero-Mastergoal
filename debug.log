@@ -466,3 +466,250 @@
 2025-04-19 03:24:20,554 [INFO] The outcome - r value: 1
 2025-04-19 03:24:20,554 [INFO] Game 80 done in 1233652ms
 2025-04-19 03:24:20,554 [INFO] Saving partial examples to ./new/partial_iter_1_80.examples with 80 games completed
+2025-04-23 14:17:54,498 [INFO] Loading MastergoalGame...
+2025-04-23 14:17:54,498 [INFO] Loading NNetWrapper...
+2025-04-23 14:17:54,875 [WARNING] Not loading a checkpoint!
+2025-04-23 14:17:54,875 [INFO] Loading the Coach...
+2025-04-23 14:17:55,098 [INFO] Starting the learning process!!
+2025-04-23 14:17:55,099 [INFO] Found partial example files: ['partial_iter_1_20.examples', 'partial_iter_1_60.examples', 'partial_iter_1_40.examples', 'partial_iter_1_80.examples']
+2025-04-23 14:17:55,099 [INFO] Loading most recent partial examples from ./new/partial_iter_1_80.examples
+2025-04-23 14:17:55,121 [INFO] Restored NumPy RNG state
+2025-04-23 14:17:55,121 [INFO] Restored Python RNG state
+2025-04-23 14:17:55,121 [INFO] Adding randomization with seed 1661152945 to ensure diverse exploration
+2025-04-23 14:17:55,122 [INFO] Loaded 80 games from partial file
+2025-04-23 14:17:55,122 [INFO] Resuming from game 80
+2025-04-23 14:17:55,122 [INFO] Starting Iter #1 ...
+2025-04-23 14:17:55,122 [INFO] Need 20 more games for this iteration
+2025-04-23 14:17:55,124 [INFO] Adjusted exploration parameters: cpuct=1.89634153182775
+2025-04-23 14:24:14,808 [INFO] Turn #10
+2025-04-23 14:31:36,592 [INFO] Turn #20
+2025-04-23 14:39:05,126 [INFO] Turn #30
+2025-04-23 14:46:22,959 [INFO] Turn #40
+2025-04-23 14:46:42,094 [INFO] The outcome - r value: 0.0001
+2025-04-23 14:46:42,094 [INFO] Game 81 done in 1726968ms
+2025-04-23 14:53:27,618 [INFO] Turn #10
+2025-04-23 15:01:09,208 [INFO] Turn #20
+2025-04-23 15:08:43,482 [INFO] Turn #30
+2025-04-23 15:16:13,092 [INFO] Turn #40
+2025-04-23 15:16:31,510 [INFO] The outcome - r value: 0.0001
+2025-04-23 15:16:31,510 [INFO] Game 82 done in 1789408ms
+2025-04-23 15:23:20,386 [INFO] Turn #10
+2025-04-23 15:30:43,368 [INFO] Turn #20
+2025-04-23 15:38:10,273 [INFO] Turn #30
+2025-04-23 15:45:33,879 [INFO] Turn #40
+2025-04-23 15:45:52,498 [INFO] The outcome - r value: 0.0001
+2025-04-23 15:45:52,498 [INFO] Game 83 done in 1760981ms
+2025-04-23 15:52:31,894 [INFO] Turn #10
+2025-04-23 15:59:47,341 [INFO] Turn #20
+2025-04-23 16:07:12,399 [INFO] Turn #30
+2025-04-23 16:13:07,328 [INFO] The outcome - r value: 1
+2025-04-23 16:13:07,328 [INFO] Game 84 done in 1634822ms
+2025-04-23 16:19:32,027 [INFO] Turn #10
+2025-04-23 16:26:34,176 [INFO] Turn #20
+2025-04-23 16:33:39,693 [INFO] Turn #30
+2025-04-23 16:40:24,360 [INFO] Turn #40
+2025-04-23 16:40:42,168 [INFO] The outcome - r value: 0.0001
+2025-04-23 16:40:42,168 [INFO] Game 85 done in 1654832ms
+2025-04-23 16:47:07,687 [INFO] Turn #10
+2025-04-23 16:54:18,924 [INFO] Turn #20
+2025-04-23 17:02:08,932 [INFO] Turn #30
+2025-04-23 17:09:46,639 [INFO] Turn #40
+2025-04-23 17:10:04,938 [INFO] The outcome - r value: 0.0001
+2025-04-23 17:10:04,938 [INFO] Game 86 done in 1762762ms
+2025-04-23 17:16:39,221 [INFO] Turn #10
+2025-04-23 17:23:43,043 [INFO] Turn #20
+2025-04-23 17:26:45,831 [INFO] The outcome - r value: 1
+2025-04-23 17:26:45,831 [INFO] Game 87 done in 1000885ms
+2025-04-23 17:30:19,096 [INFO] The outcome - r value: 1
+2025-04-23 17:30:19,096 [INFO] Game 88 done in 213260ms
+2025-04-23 17:36:50,073 [INFO] Turn #10
+2025-04-23 17:44:20,525 [INFO] Turn #20
+2025-04-23 17:51:54,721 [INFO] Turn #30
+2025-04-23 17:59:05,290 [INFO] Turn #40
+2025-04-23 17:59:23,027 [INFO] The outcome - r value: 0.0001
+2025-04-23 17:59:23,028 [INFO] Game 89 done in 1743930ms
+2025-04-23 18:05:39,358 [INFO] Turn #10
+2025-04-23 18:12:50,500 [INFO] Turn #20
+2025-04-23 18:20:32,847 [INFO] Turn #30
+2025-04-23 18:28:11,128 [INFO] Turn #40
+2025-04-23 18:28:28,992 [INFO] The outcome - r value: 0.0001
+2025-04-23 18:28:28,992 [INFO] Game 90 done in 1745956ms
+2025-04-23 18:34:58,183 [INFO] Turn #10
+2025-04-23 18:42:18,928 [INFO] Turn #20
+2025-04-23 18:49:38,795 [INFO] Turn #30
+2025-04-23 18:56:39,543 [INFO] Turn #40
+2025-04-23 18:56:57,385 [INFO] The outcome - r value: 0.0001
+2025-04-23 18:56:57,386 [INFO] Game 91 done in 1708385ms
+2025-04-23 19:03:11,376 [INFO] Turn #10
+2025-04-23 19:07:38,534 [INFO] The outcome - r value: 1
+2025-04-23 19:07:38,535 [INFO] Game 92 done in 641141ms
+2025-04-23 19:13:46,177 [INFO] Turn #10
+2025-04-23 19:20:43,220 [INFO] Turn #20
+2025-04-23 19:27:53,694 [INFO] Turn #30
+2025-04-23 19:34:51,027 [INFO] Turn #40
+2025-04-23 19:35:08,708 [INFO] The outcome - r value: 0.0001
+2025-04-23 19:35:08,709 [INFO] Game 93 done in 1650171ms
+2025-04-23 19:41:13,736 [INFO] Turn #10
+2025-04-23 19:48:36,926 [INFO] Turn #20
+2025-04-23 19:55:38,167 [INFO] Turn #30
+2025-04-23 19:59:17,980 [INFO] The outcome - r value: -1
+2025-04-23 19:59:17,980 [INFO] Game 94 done in 1449263ms
+2025-04-23 20:05:40,112 [INFO] Turn #10
+2025-04-23 20:12:54,699 [INFO] Turn #20
+2025-04-23 20:19:56,265 [INFO] Turn #30
+2025-04-23 20:26:57,624 [INFO] Turn #40
+2025-04-23 20:27:15,543 [INFO] The outcome - r value: 0.0001
+2025-04-23 20:27:15,544 [INFO] Game 95 done in 1677557ms
+2025-04-23 20:33:38,192 [INFO] Turn #10
+2025-04-23 20:40:58,837 [INFO] Turn #20
+2025-04-23 20:48:38,607 [INFO] Turn #30
+2025-04-23 20:55:41,565 [INFO] Turn #40
+2025-04-23 20:55:59,253 [INFO] The outcome - r value: 0.0001
+2025-04-23 20:55:59,254 [INFO] Game 96 done in 1723701ms
+2025-04-23 21:02:09,022 [INFO] Turn #10
+2025-04-23 21:09:34,644 [INFO] Turn #20
+2025-04-23 21:16:59,933 [INFO] Turn #30
+2025-04-23 21:24:22,308 [INFO] Turn #40
+2025-04-23 21:24:40,488 [INFO] The outcome - r value: 0.0001
+2025-04-23 21:24:40,489 [INFO] Game 97 done in 1721226ms
+2025-04-23 21:31:01,331 [INFO] Turn #10
+2025-04-23 21:38:08,272 [INFO] Turn #20
+2025-04-23 21:45:17,836 [INFO] Turn #30
+2025-04-23 21:52:10,310 [INFO] Turn #40
+2025-04-23 21:52:28,138 [INFO] The outcome - r value: 0.0001
+2025-04-23 21:52:28,139 [INFO] Game 98 done in 1667641ms
+2025-04-23 21:58:50,325 [INFO] Turn #10
+2025-04-23 22:06:00,091 [INFO] Turn #20
+2025-04-23 22:13:22,171 [INFO] Turn #30
+2025-04-23 22:20:54,591 [INFO] Turn #40
+2025-04-23 22:21:12,034 [INFO] The outcome - r value: 0.0001
+2025-04-23 22:21:12,034 [INFO] Game 99 done in 1723886ms
+2025-04-23 22:27:33,890 [INFO] Turn #10
+2025-04-23 22:34:53,479 [INFO] Turn #20
+2025-04-23 22:41:54,875 [INFO] Turn #30
+2025-04-23 22:48:56,958 [INFO] Turn #40
+2025-04-23 22:49:14,797 [INFO] The outcome - r value: 0.0001
+2025-04-23 22:49:14,798 [INFO] Game 100 done in 1682754ms
+2025-04-23 22:49:14,798 [INFO] Saving partial examples to ./new/partial_iter_1_100.examples with 100 games completed
+2025-04-23 22:49:14,888 [INFO] Removed partial file partial_iter_1_20.examples
+2025-04-23 22:49:14,893 [INFO] Removed partial file partial_iter_1_60.examples
+2025-04-23 22:49:14,896 [INFO] Removed partial file partial_iter_1_40.examples
+2025-04-23 22:49:14,903 [INFO] Removed partial file partial_iter_1_100.examples
+2025-04-23 22:49:14,909 [INFO] Removed partial file partial_iter_1_80.examples
+2025-04-23 22:49:14,910 [INFO] Saving examples to ./new/checkpoint_0.pth.tar.examples
+2025-04-23 22:49:25,327 [DEBUG] Loaded backend agg version v2.2.
+2025-04-23 22:49:25,332 [DEBUG] findfont: Matching sans\-serif:style=normal:variant=normal:weight=normal:stretch=normal:size=10.0.
+2025-04-23 22:49:25,333 [DEBUG] findfont: score(FontEntry(fname='/kaggle/working/Mastergoal-AlphaZero/myenv/lib/python3.10/site-packages/matplotlib/mpl-data/fonts/ttf/cmss10.ttf', name='cmss10', style='normal', variant='normal', weight=400, stretch='normal', size='scalable')) = 10.05
+2025-04-23 22:49:25,333 [DEBUG] findfont: score(FontEntry(fname='/kaggle/working/Mastergoal-AlphaZero/myenv/lib/python3.10/site-packages/matplotlib/mpl-data/fonts/ttf/cmmi10.ttf', name='cmmi10', style='normal', variant='normal', weight=400, stretch='normal', size='scalable')) = 10.05
+2025-04-23 22:49:25,333 [DEBUG] findfont: score(FontEntry(fname='/kaggle/working/Mastergoal-AlphaZero/myenv/lib/python3.10/site-packages/matplotlib/mpl-data/fonts/ttf/DejaVuSans-Bold.ttf', name='DejaVu Sans', style='normal', variant='normal', weight=700, stretch='normal', size='scalable')) = 0.33499999999999996
+2025-04-23 22:49:25,333 [DEBUG] findfont: score(FontEntry(fname='/kaggle/working/Mastergoal-AlphaZero/myenv/lib/python3.10/site-packages/matplotlib/mpl-data/fonts/ttf/STIXSizFiveSymReg.ttf', name='STIXSizeFiveSym', style='normal', variant='normal', weight=400, stretch='normal', size='scalable')) = 10.05
+2025-04-23 22:49:25,333 [DEBUG] findfont: score(FontEntry(fname='/kaggle/working/Mastergoal-AlphaZero/myenv/lib/python3.10/site-packages/matplotlib/mpl-data/fonts/ttf/DejaVuSans-BoldOblique.ttf', name='DejaVu Sans', style='oblique', variant='normal', weight=700, stretch='normal', size='scalable')) = 1.335
+2025-04-23 22:49:25,334 [DEBUG] findfont: score(FontEntry(fname='/kaggle/working/Mastergoal-AlphaZero/myenv/lib/python3.10/site-packages/matplotlib/mpl-data/fonts/ttf/DejaVuSansMono-Oblique.ttf', name='DejaVu Sans Mono', style='oblique', variant='normal', weight=400, stretch='normal', size='scalable')) = 11.05
+2025-04-23 22:49:25,334 [DEBUG] findfont: score(FontEntry(fname='/kaggle/working/Mastergoal-AlphaZero/myenv/lib/python3.10/site-packages/matplotlib/mpl-data/fonts/ttf/STIXGeneral.ttf', name='STIXGeneral', style='normal', variant='normal', weight=400, stretch='normal', size='scalable')) = 10.05
+2025-04-23 22:49:25,334 [DEBUG] findfont: score(FontEntry(fname='/kaggle/working/Mastergoal-AlphaZero/myenv/lib/python3.10/site-packages/matplotlib/mpl-data/fonts/ttf/STIXNonUni.ttf', name='STIXNonUnicode', style='normal', variant='normal', weight=400, stretch='normal', size='scalable')) = 10.05
+2025-04-23 22:49:25,334 [DEBUG] findfont: score(FontEntry(fname='/kaggle/working/Mastergoal-AlphaZero/myenv/lib/python3.10/site-packages/matplotlib/mpl-data/fonts/ttf/DejaVuSansMono-BoldOblique.ttf', name='DejaVu Sans Mono', style='oblique', variant='normal', weight=700, stretch='normal', size='scalable')) = 11.335
+2025-04-23 22:49:25,335 [DEBUG] findfont: score(FontEntry(fname='/kaggle/working/Mastergoal-AlphaZero/myenv/lib/python3.10/site-packages/matplotlib/mpl-data/fonts/ttf/STIXGeneralBol.ttf', name='STIXGeneral', style='normal', variant='normal', weight=700, stretch='normal', size='scalable')) = 10.335
+2025-04-23 22:49:25,335 [DEBUG] findfont: score(FontEntry(fname='/kaggle/working/Mastergoal-AlphaZero/myenv/lib/python3.10/site-packages/matplotlib/mpl-data/fonts/ttf/STIXNonUniBolIta.ttf', name='STIXNonUnicode', style='italic', variant='normal', weight=700, stretch='normal', size='scalable')) = 11.335
+2025-04-23 22:49:25,335 [DEBUG] findfont: score(FontEntry(fname='/kaggle/working/Mastergoal-AlphaZero/myenv/lib/python3.10/site-packages/matplotlib/mpl-data/fonts/ttf/STIXSizTwoSymBol.ttf', name='STIXSizeTwoSym', style='normal', variant='normal', weight=700, stretch='normal', size='scalable')) = 10.335
+2025-04-23 22:49:25,335 [DEBUG] findfont: score(FontEntry(fname='/kaggle/working/Mastergoal-AlphaZero/myenv/lib/python3.10/site-packages/matplotlib/mpl-data/fonts/ttf/DejaVuSerif.ttf', name='DejaVu Serif', style='normal', variant='normal', weight=400, stretch='normal', size='scalable')) = 10.05
+2025-04-23 22:49:25,335 [DEBUG] findfont: score(FontEntry(fname='/kaggle/working/Mastergoal-AlphaZero/myenv/lib/python3.10/site-packages/matplotlib/mpl-data/fonts/ttf/STIXGeneralBolIta.ttf', name='STIXGeneral', style='italic', variant='normal', weight=700, stretch='normal', size='scalable')) = 11.335
+2025-04-23 22:49:25,336 [DEBUG] findfont: score(FontEntry(fname='/kaggle/working/Mastergoal-AlphaZero/myenv/lib/python3.10/site-packages/matplotlib/mpl-data/fonts/ttf/cmtt10.ttf', name='cmtt10', style='normal', variant='normal', weight=400, stretch='normal', size='scalable')) = 10.05
+2025-04-23 22:49:25,336 [DEBUG] findfont: score(FontEntry(fname='/kaggle/working/Mastergoal-AlphaZero/myenv/lib/python3.10/site-packages/matplotlib/mpl-data/fonts/ttf/STIXSizOneSymBol.ttf', name='STIXSizeOneSym', style='normal', variant='normal', weight=700, stretch='normal', size='scalable')) = 10.335
+2025-04-23 22:49:25,336 [DEBUG] findfont: score(FontEntry(fname='/kaggle/working/Mastergoal-AlphaZero/myenv/lib/python3.10/site-packages/matplotlib/mpl-data/fonts/ttf/STIXSizOneSymReg.ttf', name='STIXSizeOneSym', style='normal', variant='normal', weight=400, stretch='normal', size='scalable')) = 10.05
+2025-04-23 22:49:25,336 [DEBUG] findfont: score(FontEntry(fname='/kaggle/working/Mastergoal-AlphaZero/myenv/lib/python3.10/site-packages/matplotlib/mpl-data/fonts/ttf/cmex10.ttf', name='cmex10', style='normal', variant='normal', weight=400, stretch='normal', size='scalable')) = 10.05
+2025-04-23 22:49:25,337 [DEBUG] findfont: score(FontEntry(fname='/kaggle/working/Mastergoal-AlphaZero/myenv/lib/python3.10/site-packages/matplotlib/mpl-data/fonts/ttf/DejaVuSansDisplay.ttf', name='DejaVu Sans Display', style='normal', variant='normal', weight=400, stretch='normal', size='scalable')) = 10.05
+2025-04-23 22:49:25,337 [DEBUG] findfont: score(FontEntry(fname='/kaggle/working/Mastergoal-AlphaZero/myenv/lib/python3.10/site-packages/matplotlib/mpl-data/fonts/ttf/cmr10.ttf', name='cmr10', style='normal', variant='normal', weight=400, stretch='normal', size='scalable')) = 10.05
+2025-04-23 22:49:25,337 [DEBUG] findfont: score(FontEntry(fname='/kaggle/working/Mastergoal-AlphaZero/myenv/lib/python3.10/site-packages/matplotlib/mpl-data/fonts/ttf/cmb10.ttf', name='cmb10', style='normal', variant='normal', weight=400, stretch='normal', size='scalable')) = 10.05
+2025-04-23 22:49:25,337 [DEBUG] findfont: score(FontEntry(fname='/kaggle/working/Mastergoal-AlphaZero/myenv/lib/python3.10/site-packages/matplotlib/mpl-data/fonts/ttf/DejaVuSerif-BoldItalic.ttf', name='DejaVu Serif', style='italic', variant='normal', weight=700, stretch='normal', size='scalable')) = 11.335
+2025-04-23 22:49:25,337 [DEBUG] findfont: score(FontEntry(fname='/kaggle/working/Mastergoal-AlphaZero/myenv/lib/python3.10/site-packages/matplotlib/mpl-data/fonts/ttf/STIXSizThreeSymReg.ttf', name='STIXSizeThreeSym', style='normal', variant='normal', weight=400, stretch='normal', size='scalable')) = 10.05
+2025-04-23 22:49:25,338 [DEBUG] findfont: score(FontEntry(fname='/kaggle/working/Mastergoal-AlphaZero/myenv/lib/python3.10/site-packages/matplotlib/mpl-data/fonts/ttf/DejaVuSansMono-Bold.ttf', name='DejaVu Sans Mono', style='normal', variant='normal', weight=700, stretch='normal', size='scalable')) = 10.335
+2025-04-23 22:49:25,338 [DEBUG] findfont: score(FontEntry(fname='/kaggle/working/Mastergoal-AlphaZero/myenv/lib/python3.10/site-packages/matplotlib/mpl-data/fonts/ttf/DejaVuSansMono.ttf', name='DejaVu Sans Mono', style='normal', variant='normal', weight=400, stretch='normal', size='scalable')) = 10.05
+2025-04-23 22:49:25,338 [DEBUG] findfont: score(FontEntry(fname='/kaggle/working/Mastergoal-AlphaZero/myenv/lib/python3.10/site-packages/matplotlib/mpl-data/fonts/ttf/STIXGeneralItalic.ttf', name='STIXGeneral', style='italic', variant='normal', weight=400, stretch='normal', size='scalable')) = 11.05
+2025-04-23 22:49:25,338 [DEBUG] findfont: score(FontEntry(fname='/kaggle/working/Mastergoal-AlphaZero/myenv/lib/python3.10/site-packages/matplotlib/mpl-data/fonts/ttf/STIXSizFourSymBol.ttf', name='STIXSizeFourSym', style='normal', variant='normal', weight=700, stretch='normal', size='scalable')) = 10.335
+2025-04-23 22:49:25,338 [DEBUG] findfont: score(FontEntry(fname='/kaggle/working/Mastergoal-AlphaZero/myenv/lib/python3.10/site-packages/matplotlib/mpl-data/fonts/ttf/STIXSizThreeSymBol.ttf', name='STIXSizeThreeSym', style='normal', variant='normal', weight=700, stretch='normal', size='scalable')) = 10.335
+2025-04-23 22:49:25,339 [DEBUG] findfont: score(FontEntry(fname='/kaggle/working/Mastergoal-AlphaZero/myenv/lib/python3.10/site-packages/matplotlib/mpl-data/fonts/ttf/STIXNonUniIta.ttf', name='STIXNonUnicode', style='italic', variant='normal', weight=400, stretch='normal', size='scalable')) = 11.05
+2025-04-23 22:49:25,339 [DEBUG] findfont: score(FontEntry(fname='/kaggle/working/Mastergoal-AlphaZero/myenv/lib/python3.10/site-packages/matplotlib/mpl-data/fonts/ttf/DejaVuSerif-Italic.ttf', name='DejaVu Serif', style='italic', variant='normal', weight=400, stretch='normal', size='scalable')) = 11.05
+2025-04-23 22:49:25,339 [DEBUG] findfont: score(FontEntry(fname='/kaggle/working/Mastergoal-AlphaZero/myenv/lib/python3.10/site-packages/matplotlib/mpl-data/fonts/ttf/STIXSizFourSymReg.ttf', name='STIXSizeFourSym', style='normal', variant='normal', weight=400, stretch='normal', size='scalable')) = 10.05
+2025-04-23 22:49:25,339 [DEBUG] findfont: score(FontEntry(fname='/kaggle/working/Mastergoal-AlphaZero/myenv/lib/python3.10/site-packages/matplotlib/mpl-data/fonts/ttf/STIXNonUniBol.ttf', name='STIXNonUnicode', style='normal', variant='normal', weight=700, stretch='normal', size='scalable')) = 10.335
+2025-04-23 22:49:25,339 [DEBUG] findfont: score(FontEntry(fname='/kaggle/working/Mastergoal-AlphaZero/myenv/lib/python3.10/site-packages/matplotlib/mpl-data/fonts/ttf/DejaVuSerifDisplay.ttf', name='DejaVu Serif Display', style='normal', variant='normal', weight=400, stretch='normal', size='scalable')) = 10.05
+2025-04-23 22:49:25,340 [DEBUG] findfont: score(FontEntry(fname='/kaggle/working/Mastergoal-AlphaZero/myenv/lib/python3.10/site-packages/matplotlib/mpl-data/fonts/ttf/DejaVuSerif-Bold.ttf', name='DejaVu Serif', style='normal', variant='normal', weight=700, stretch='normal', size='scalable')) = 10.335
+2025-04-23 22:49:25,340 [DEBUG] findfont: score(FontEntry(fname='/kaggle/working/Mastergoal-AlphaZero/myenv/lib/python3.10/site-packages/matplotlib/mpl-data/fonts/ttf/DejaVuSans.ttf', name='DejaVu Sans', style='normal', variant='normal', weight=400, stretch='normal', size='scalable')) = 0.05
+2025-04-23 22:49:25,340 [DEBUG] findfont: score(FontEntry(fname='/kaggle/working/Mastergoal-AlphaZero/myenv/lib/python3.10/site-packages/matplotlib/mpl-data/fonts/ttf/cmsy10.ttf', name='cmsy10', style='normal', variant='normal', weight=400, stretch='normal', size='scalable')) = 10.05
+2025-04-23 22:49:25,340 [DEBUG] findfont: score(FontEntry(fname='/kaggle/working/Mastergoal-AlphaZero/myenv/lib/python3.10/site-packages/matplotlib/mpl-data/fonts/ttf/STIXSizTwoSymReg.ttf', name='STIXSizeTwoSym', style='normal', variant='normal', weight=400, stretch='normal', size='scalable')) = 10.05
+2025-04-23 22:49:25,340 [DEBUG] findfont: score(FontEntry(fname='/kaggle/working/Mastergoal-AlphaZero/myenv/lib/python3.10/site-packages/matplotlib/mpl-data/fonts/ttf/DejaVuSans-Oblique.ttf', name='DejaVu Sans', style='oblique', variant='normal', weight=400, stretch='normal', size='scalable')) = 1.05
+2025-04-23 22:49:25,341 [DEBUG] findfont: score(FontEntry(fname='/usr/share/fonts/truetype/liberation/LiberationSans-Italic.ttf', name='Liberation Sans', style='italic', variant='normal', weight=400, stretch='normal', size='scalable')) = 11.05
+2025-04-23 22:49:25,341 [DEBUG] findfont: score(FontEntry(fname='/usr/share/fonts/truetype/liberation/LiberationSansNarrow-Regular.ttf', name='Liberation Sans Narrow', style='normal', variant='normal', weight=400, stretch='condensed', size='scalable')) = 10.25
+2025-04-23 22:49:25,341 [DEBUG] findfont: score(FontEntry(fname='/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf', name='Liberation Sans', style='normal', variant='normal', weight=700, stretch='normal', size='scalable')) = 10.335
+2025-04-23 22:49:25,341 [DEBUG] findfont: score(FontEntry(fname='/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf', name='Liberation Sans', style='normal', variant='normal', weight=400, stretch='normal', size='scalable')) = 10.05
+2025-04-23 22:49:25,341 [DEBUG] findfont: score(FontEntry(fname='/usr/share/fonts/truetype/liberation/LiberationSerif-BoldItalic.ttf', name='Liberation Serif', style='italic', variant='normal', weight=700, stretch='normal', size='scalable')) = 11.335
+2025-04-23 22:49:25,342 [DEBUG] findfont: score(FontEntry(fname='/usr/share/fonts/truetype/liberation/LiberationSans-BoldItalic.ttf', name='Liberation Sans', style='italic', variant='normal', weight=700, stretch='normal', size='scalable')) = 11.335
+2025-04-23 22:49:25,342 [DEBUG] findfont: score(FontEntry(fname='/usr/share/fonts/truetype/liberation/LiberationSansNarrow-Bold.ttf', name='Liberation Sans Narrow', style='normal', variant='normal', weight=700, stretch='condensed', size='scalable')) = 10.535
+2025-04-23 22:49:25,342 [DEBUG] findfont: score(FontEntry(fname='/usr/share/fonts/truetype/liberation/LiberationSansNarrow-BoldItalic.ttf', name='Liberation Sans Narrow', style='italic', variant='normal', weight=700, stretch='condensed', size='scalable')) = 11.535
+2025-04-23 22:49:25,342 [DEBUG] findfont: score(FontEntry(fname='/usr/share/fonts/truetype/liberation/LiberationSansNarrow-Italic.ttf', name='Liberation Sans Narrow', style='italic', variant='normal', weight=400, stretch='condensed', size='scalable')) = 11.25
+2025-04-23 22:49:25,342 [DEBUG] findfont: score(FontEntry(fname='/usr/share/fonts/truetype/liberation/LiberationMono-Regular.ttf', name='Liberation Mono', style='normal', variant='normal', weight=400, stretch='normal', size='scalable')) = 10.05
+2025-04-23 22:49:25,343 [DEBUG] findfont: score(FontEntry(fname='/usr/share/fonts/truetype/liberation/LiberationMono-Bold.ttf', name='Liberation Mono', style='normal', variant='normal', weight=700, stretch='normal', size='scalable')) = 10.335
+2025-04-23 22:49:25,343 [DEBUG] findfont: score(FontEntry(fname='/usr/share/fonts/truetype/liberation/LiberationMono-BoldItalic.ttf', name='Liberation Mono', style='italic', variant='normal', weight=700, stretch='normal', size='scalable')) = 11.335
+2025-04-23 22:49:25,343 [DEBUG] findfont: score(FontEntry(fname='/usr/share/fonts/truetype/humor-sans/Humor-Sans.ttf', name='Humor Sans', style='normal', variant='normal', weight=400, stretch='normal', size='scalable')) = 10.05
+2025-04-23 22:49:25,343 [DEBUG] findfont: score(FontEntry(fname='/usr/share/fonts/truetype/liberation/LiberationSerif-Bold.ttf', name='Liberation Serif', style='normal', variant='normal', weight=700, stretch='normal', size='scalable')) = 10.335
+2025-04-23 22:49:25,343 [DEBUG] findfont: score(FontEntry(fname='/usr/share/fonts/truetype/liberation/LiberationMono-Italic.ttf', name='Liberation Mono', style='italic', variant='normal', weight=400, stretch='normal', size='scalable')) = 11.05
+2025-04-23 22:49:25,344 [DEBUG] findfont: score(FontEntry(fname='/usr/share/fonts/truetype/liberation/LiberationSerif-Italic.ttf', name='Liberation Serif', style='italic', variant='normal', weight=400, stretch='normal', size='scalable')) = 11.05
+2025-04-23 22:49:25,344 [DEBUG] findfont: score(FontEntry(fname='/usr/share/fonts/truetype/liberation/LiberationSerif-Regular.ttf', name='Liberation Serif', style='normal', variant='normal', weight=400, stretch='normal', size='scalable')) = 10.05
+2025-04-23 22:49:25,344 [DEBUG] findfont: Matching sans\-serif:style=normal:variant=normal:weight=normal:stretch=normal:size=10.0 to DejaVu Sans ('/kaggle/working/Mastergoal-AlphaZero/myenv/lib/python3.10/site-packages/matplotlib/mpl-data/fonts/ttf/DejaVuSans.ttf') with score of 0.050000.
+2025-04-23 22:49:25,430 [DEBUG] findfont: Matching sans\-serif:style=normal:variant=normal:weight=normal:stretch=normal:size=12.0.
+2025-04-23 22:49:25,431 [DEBUG] findfont: score(FontEntry(fname='/kaggle/working/Mastergoal-AlphaZero/myenv/lib/python3.10/site-packages/matplotlib/mpl-data/fonts/ttf/cmss10.ttf', name='cmss10', style='normal', variant='normal', weight=400, stretch='normal', size='scalable')) = 10.05
+2025-04-23 22:49:25,431 [DEBUG] findfont: score(FontEntry(fname='/kaggle/working/Mastergoal-AlphaZero/myenv/lib/python3.10/site-packages/matplotlib/mpl-data/fonts/ttf/cmmi10.ttf', name='cmmi10', style='normal', variant='normal', weight=400, stretch='normal', size='scalable')) = 10.05
+2025-04-23 22:49:25,432 [DEBUG] findfont: score(FontEntry(fname='/kaggle/working/Mastergoal-AlphaZero/myenv/lib/python3.10/site-packages/matplotlib/mpl-data/fonts/ttf/DejaVuSans-Bold.ttf', name='DejaVu Sans', style='normal', variant='normal', weight=700, stretch='normal', size='scalable')) = 0.33499999999999996
+2025-04-23 22:49:25,432 [DEBUG] findfont: score(FontEntry(fname='/kaggle/working/Mastergoal-AlphaZero/myenv/lib/python3.10/site-packages/matplotlib/mpl-data/fonts/ttf/STIXSizFiveSymReg.ttf', name='STIXSizeFiveSym', style='normal', variant='normal', weight=400, stretch='normal', size='scalable')) = 10.05
+2025-04-23 22:49:25,432 [DEBUG] findfont: score(FontEntry(fname='/kaggle/working/Mastergoal-AlphaZero/myenv/lib/python3.10/site-packages/matplotlib/mpl-data/fonts/ttf/DejaVuSans-BoldOblique.ttf', name='DejaVu Sans', style='oblique', variant='normal', weight=700, stretch='normal', size='scalable')) = 1.335
+2025-04-23 22:49:25,433 [DEBUG] findfont: score(FontEntry(fname='/kaggle/working/Mastergoal-AlphaZero/myenv/lib/python3.10/site-packages/matplotlib/mpl-data/fonts/ttf/DejaVuSansMono-Oblique.ttf', name='DejaVu Sans Mono', style='oblique', variant='normal', weight=400, stretch='normal', size='scalable')) = 11.05
+2025-04-23 22:49:25,433 [DEBUG] findfont: score(FontEntry(fname='/kaggle/working/Mastergoal-AlphaZero/myenv/lib/python3.10/site-packages/matplotlib/mpl-data/fonts/ttf/STIXGeneral.ttf', name='STIXGeneral', style='normal', variant='normal', weight=400, stretch='normal', size='scalable')) = 10.05
+2025-04-23 22:49:25,434 [DEBUG] findfont: score(FontEntry(fname='/kaggle/working/Mastergoal-AlphaZero/myenv/lib/python3.10/site-packages/matplotlib/mpl-data/fonts/ttf/STIXNonUni.ttf', name='STIXNonUnicode', style='normal', variant='normal', weight=400, stretch='normal', size='scalable')) = 10.05
+2025-04-23 22:49:25,434 [DEBUG] findfont: score(FontEntry(fname='/kaggle/working/Mastergoal-AlphaZero/myenv/lib/python3.10/site-packages/matplotlib/mpl-data/fonts/ttf/DejaVuSansMono-BoldOblique.ttf', name='DejaVu Sans Mono', style='oblique', variant='normal', weight=700, stretch='normal', size='scalable')) = 11.335
+2025-04-23 22:49:25,434 [DEBUG] findfont: score(FontEntry(fname='/kaggle/working/Mastergoal-AlphaZero/myenv/lib/python3.10/site-packages/matplotlib/mpl-data/fonts/ttf/STIXGeneralBol.ttf', name='STIXGeneral', style='normal', variant='normal', weight=700, stretch='normal', size='scalable')) = 10.335
+2025-04-23 22:49:25,435 [DEBUG] findfont: score(FontEntry(fname='/kaggle/working/Mastergoal-AlphaZero/myenv/lib/python3.10/site-packages/matplotlib/mpl-data/fonts/ttf/STIXNonUniBolIta.ttf', name='STIXNonUnicode', style='italic', variant='normal', weight=700, stretch='normal', size='scalable')) = 11.335
+2025-04-23 22:49:25,435 [DEBUG] findfont: score(FontEntry(fname='/kaggle/working/Mastergoal-AlphaZero/myenv/lib/python3.10/site-packages/matplotlib/mpl-data/fonts/ttf/STIXSizTwoSymBol.ttf', name='STIXSizeTwoSym', style='normal', variant='normal', weight=700, stretch='normal', size='scalable')) = 10.335
+2025-04-23 22:49:25,435 [DEBUG] findfont: score(FontEntry(fname='/kaggle/working/Mastergoal-AlphaZero/myenv/lib/python3.10/site-packages/matplotlib/mpl-data/fonts/ttf/DejaVuSerif.ttf', name='DejaVu Serif', style='normal', variant='normal', weight=400, stretch='normal', size='scalable')) = 10.05
+2025-04-23 22:49:25,436 [DEBUG] findfont: score(FontEntry(fname='/kaggle/working/Mastergoal-AlphaZero/myenv/lib/python3.10/site-packages/matplotlib/mpl-data/fonts/ttf/STIXGeneralBolIta.ttf', name='STIXGeneral', style='italic', variant='normal', weight=700, stretch='normal', size='scalable')) = 11.335
+2025-04-23 22:49:25,436 [DEBUG] findfont: score(FontEntry(fname='/kaggle/working/Mastergoal-AlphaZero/myenv/lib/python3.10/site-packages/matplotlib/mpl-data/fonts/ttf/cmtt10.ttf', name='cmtt10', style='normal', variant='normal', weight=400, stretch='normal', size='scalable')) = 10.05
+2025-04-23 22:49:25,436 [DEBUG] findfont: score(FontEntry(fname='/kaggle/working/Mastergoal-AlphaZero/myenv/lib/python3.10/site-packages/matplotlib/mpl-data/fonts/ttf/STIXSizOneSymBol.ttf', name='STIXSizeOneSym', style='normal', variant='normal', weight=700, stretch='normal', size='scalable')) = 10.335
+2025-04-23 22:49:25,437 [DEBUG] findfont: score(FontEntry(fname='/kaggle/working/Mastergoal-AlphaZero/myenv/lib/python3.10/site-packages/matplotlib/mpl-data/fonts/ttf/STIXSizOneSymReg.ttf', name='STIXSizeOneSym', style='normal', variant='normal', weight=400, stretch='normal', size='scalable')) = 10.05
+2025-04-23 22:49:25,437 [DEBUG] findfont: score(FontEntry(fname='/kaggle/working/Mastergoal-AlphaZero/myenv/lib/python3.10/site-packages/matplotlib/mpl-data/fonts/ttf/cmex10.ttf', name='cmex10', style='normal', variant='normal', weight=400, stretch='normal', size='scalable')) = 10.05
+2025-04-23 22:49:25,437 [DEBUG] findfont: score(FontEntry(fname='/kaggle/working/Mastergoal-AlphaZero/myenv/lib/python3.10/site-packages/matplotlib/mpl-data/fonts/ttf/DejaVuSansDisplay.ttf', name='DejaVu Sans Display', style='normal', variant='normal', weight=400, stretch='normal', size='scalable')) = 10.05
+2025-04-23 22:49:25,438 [DEBUG] findfont: score(FontEntry(fname='/kaggle/working/Mastergoal-AlphaZero/myenv/lib/python3.10/site-packages/matplotlib/mpl-data/fonts/ttf/cmr10.ttf', name='cmr10', style='normal', variant='normal', weight=400, stretch='normal', size='scalable')) = 10.05
+2025-04-23 22:49:25,438 [DEBUG] findfont: score(FontEntry(fname='/kaggle/working/Mastergoal-AlphaZero/myenv/lib/python3.10/site-packages/matplotlib/mpl-data/fonts/ttf/cmb10.ttf', name='cmb10', style='normal', variant='normal', weight=400, stretch='normal', size='scalable')) = 10.05
+2025-04-23 22:49:25,438 [DEBUG] findfont: score(FontEntry(fname='/kaggle/working/Mastergoal-AlphaZero/myenv/lib/python3.10/site-packages/matplotlib/mpl-data/fonts/ttf/DejaVuSerif-BoldItalic.ttf', name='DejaVu Serif', style='italic', variant='normal', weight=700, stretch='normal', size='scalable')) = 11.335
+2025-04-23 22:49:25,439 [DEBUG] findfont: score(FontEntry(fname='/kaggle/working/Mastergoal-AlphaZero/myenv/lib/python3.10/site-packages/matplotlib/mpl-data/fonts/ttf/STIXSizThreeSymReg.ttf', name='STIXSizeThreeSym', style='normal', variant='normal', weight=400, stretch='normal', size='scalable')) = 10.05
+2025-04-23 22:49:25,439 [DEBUG] findfont: score(FontEntry(fname='/kaggle/working/Mastergoal-AlphaZero/myenv/lib/python3.10/site-packages/matplotlib/mpl-data/fonts/ttf/DejaVuSansMono-Bold.ttf', name='DejaVu Sans Mono', style='normal', variant='normal', weight=700, stretch='normal', size='scalable')) = 10.335
+2025-04-23 22:49:25,439 [DEBUG] findfont: score(FontEntry(fname='/kaggle/working/Mastergoal-AlphaZero/myenv/lib/python3.10/site-packages/matplotlib/mpl-data/fonts/ttf/DejaVuSansMono.ttf', name='DejaVu Sans Mono', style='normal', variant='normal', weight=400, stretch='normal', size='scalable')) = 10.05
+2025-04-23 22:49:25,440 [DEBUG] findfont: score(FontEntry(fname='/kaggle/working/Mastergoal-AlphaZero/myenv/lib/python3.10/site-packages/matplotlib/mpl-data/fonts/ttf/STIXGeneralItalic.ttf', name='STIXGeneral', style='italic', variant='normal', weight=400, stretch='normal', size='scalable')) = 11.05
+2025-04-23 22:49:25,440 [DEBUG] findfont: score(FontEntry(fname='/kaggle/working/Mastergoal-AlphaZero/myenv/lib/python3.10/site-packages/matplotlib/mpl-data/fonts/ttf/STIXSizFourSymBol.ttf', name='STIXSizeFourSym', style='normal', variant='normal', weight=700, stretch='normal', size='scalable')) = 10.335
+2025-04-23 22:49:25,440 [DEBUG] findfont: score(FontEntry(fname='/kaggle/working/Mastergoal-AlphaZero/myenv/lib/python3.10/site-packages/matplotlib/mpl-data/fonts/ttf/STIXSizThreeSymBol.ttf', name='STIXSizeThreeSym', style='normal', variant='normal', weight=700, stretch='normal', size='scalable')) = 10.335
+2025-04-23 22:49:25,441 [DEBUG] findfont: score(FontEntry(fname='/kaggle/working/Mastergoal-AlphaZero/myenv/lib/python3.10/site-packages/matplotlib/mpl-data/fonts/ttf/STIXNonUniIta.ttf', name='STIXNonUnicode', style='italic', variant='normal', weight=400, stretch='normal', size='scalable')) = 11.05
+2025-04-23 22:49:25,441 [DEBUG] findfont: score(FontEntry(fname='/kaggle/working/Mastergoal-AlphaZero/myenv/lib/python3.10/site-packages/matplotlib/mpl-data/fonts/ttf/DejaVuSerif-Italic.ttf', name='DejaVu Serif', style='italic', variant='normal', weight=400, stretch='normal', size='scalable')) = 11.05
+2025-04-23 22:49:25,441 [DEBUG] findfont: score(FontEntry(fname='/kaggle/working/Mastergoal-AlphaZero/myenv/lib/python3.10/site-packages/matplotlib/mpl-data/fonts/ttf/STIXSizFourSymReg.ttf', name='STIXSizeFourSym', style='normal', variant='normal', weight=400, stretch='normal', size='scalable')) = 10.05
+2025-04-23 22:49:25,442 [DEBUG] findfont: score(FontEntry(fname='/kaggle/working/Mastergoal-AlphaZero/myenv/lib/python3.10/site-packages/matplotlib/mpl-data/fonts/ttf/STIXNonUniBol.ttf', name='STIXNonUnicode', style='normal', variant='normal', weight=700, stretch='normal', size='scalable')) = 10.335
+2025-04-23 22:49:25,442 [DEBUG] findfont: score(FontEntry(fname='/kaggle/working/Mastergoal-AlphaZero/myenv/lib/python3.10/site-packages/matplotlib/mpl-data/fonts/ttf/DejaVuSerifDisplay.ttf', name='DejaVu Serif Display', style='normal', variant='normal', weight=400, stretch='normal', size='scalable')) = 10.05
+2025-04-23 22:49:25,442 [DEBUG] findfont: score(FontEntry(fname='/kaggle/working/Mastergoal-AlphaZero/myenv/lib/python3.10/site-packages/matplotlib/mpl-data/fonts/ttf/DejaVuSerif-Bold.ttf', name='DejaVu Serif', style='normal', variant='normal', weight=700, stretch='normal', size='scalable')) = 10.335
+2025-04-23 22:49:25,443 [DEBUG] findfont: score(FontEntry(fname='/kaggle/working/Mastergoal-AlphaZero/myenv/lib/python3.10/site-packages/matplotlib/mpl-data/fonts/ttf/DejaVuSans.ttf', name='DejaVu Sans', style='normal', variant='normal', weight=400, stretch='normal', size='scalable')) = 0.05
+2025-04-23 22:49:25,443 [DEBUG] findfont: score(FontEntry(fname='/kaggle/working/Mastergoal-AlphaZero/myenv/lib/python3.10/site-packages/matplotlib/mpl-data/fonts/ttf/cmsy10.ttf', name='cmsy10', style='normal', variant='normal', weight=400, stretch='normal', size='scalable')) = 10.05
+2025-04-23 22:49:25,443 [DEBUG] findfont: score(FontEntry(fname='/kaggle/working/Mastergoal-AlphaZero/myenv/lib/python3.10/site-packages/matplotlib/mpl-data/fonts/ttf/STIXSizTwoSymReg.ttf', name='STIXSizeTwoSym', style='normal', variant='normal', weight=400, stretch='normal', size='scalable')) = 10.05
+2025-04-23 22:49:25,444 [DEBUG] findfont: score(FontEntry(fname='/kaggle/working/Mastergoal-AlphaZero/myenv/lib/python3.10/site-packages/matplotlib/mpl-data/fonts/ttf/DejaVuSans-Oblique.ttf', name='DejaVu Sans', style='oblique', variant='normal', weight=400, stretch='normal', size='scalable')) = 1.05
+2025-04-23 22:49:25,444 [DEBUG] findfont: score(FontEntry(fname='/usr/share/fonts/truetype/liberation/LiberationSans-Italic.ttf', name='Liberation Sans', style='italic', variant='normal', weight=400, stretch='normal', size='scalable')) = 11.05
+2025-04-23 22:49:25,444 [DEBUG] findfont: score(FontEntry(fname='/usr/share/fonts/truetype/liberation/LiberationSansNarrow-Regular.ttf', name='Liberation Sans Narrow', style='normal', variant='normal', weight=400, stretch='condensed', size='scalable')) = 10.25
+2025-04-23 22:49:25,445 [DEBUG] findfont: score(FontEntry(fname='/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf', name='Liberation Sans', style='normal', variant='normal', weight=700, stretch='normal', size='scalable')) = 10.335
+2025-04-23 22:49:25,445 [DEBUG] findfont: score(FontEntry(fname='/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf', name='Liberation Sans', style='normal', variant='normal', weight=400, stretch='normal', size='scalable')) = 10.05
+2025-04-23 22:49:25,445 [DEBUG] findfont: score(FontEntry(fname='/usr/share/fonts/truetype/liberation/LiberationSerif-BoldItalic.ttf', name='Liberation Serif', style='italic', variant='normal', weight=700, stretch='normal', size='scalable')) = 11.335
+2025-04-23 22:49:25,446 [DEBUG] findfont: score(FontEntry(fname='/usr/share/fonts/truetype/liberation/LiberationSans-BoldItalic.ttf', name='Liberation Sans', style='italic', variant='normal', weight=700, stretch='normal', size='scalable')) = 11.335
+2025-04-23 22:49:25,446 [DEBUG] findfont: score(FontEntry(fname='/usr/share/fonts/truetype/liberation/LiberationSansNarrow-Bold.ttf', name='Liberation Sans Narrow', style='normal', variant='normal', weight=700, stretch='condensed', size='scalable')) = 10.535
+2025-04-23 22:49:25,446 [DEBUG] findfont: score(FontEntry(fname='/usr/share/fonts/truetype/liberation/LiberationSansNarrow-BoldItalic.ttf', name='Liberation Sans Narrow', style='italic', variant='normal', weight=700, stretch='condensed', size='scalable')) = 11.535
+2025-04-23 22:49:25,447 [DEBUG] findfont: score(FontEntry(fname='/usr/share/fonts/truetype/liberation/LiberationSansNarrow-Italic.ttf', name='Liberation Sans Narrow', style='italic', variant='normal', weight=400, stretch='condensed', size='scalable')) = 11.25
+2025-04-23 22:49:25,447 [DEBUG] findfont: score(FontEntry(fname='/usr/share/fonts/truetype/liberation/LiberationMono-Regular.ttf', name='Liberation Mono', style='normal', variant='normal', weight=400, stretch='normal', size='scalable')) = 10.05
+2025-04-23 22:49:25,447 [DEBUG] findfont: score(FontEntry(fname='/usr/share/fonts/truetype/liberation/LiberationMono-Bold.ttf', name='Liberation Mono', style='normal', variant='normal', weight=700, stretch='normal', size='scalable')) = 10.335
+2025-04-23 22:49:25,448 [DEBUG] findfont: score(FontEntry(fname='/usr/share/fonts/truetype/liberation/LiberationMono-BoldItalic.ttf', name='Liberation Mono', style='italic', variant='normal', weight=700, stretch='normal', size='scalable')) = 11.335
+2025-04-23 22:49:25,448 [DEBUG] findfont: score(FontEntry(fname='/usr/share/fonts/truetype/humor-sans/Humor-Sans.ttf', name='Humor Sans', style='normal', variant='normal', weight=400, stretch='normal', size='scalable')) = 10.05
+2025-04-23 22:49:25,448 [DEBUG] findfont: score(FontEntry(fname='/usr/share/fonts/truetype/liberation/LiberationSerif-Bold.ttf', name='Liberation Serif', style='normal', variant='normal', weight=700, stretch='normal', size='scalable')) = 10.335
+2025-04-23 22:49:25,449 [DEBUG] findfont: score(FontEntry(fname='/usr/share/fonts/truetype/liberation/LiberationMono-Italic.ttf', name='Liberation Mono', style='italic', variant='normal', weight=400, stretch='normal', size='scalable')) = 11.05
+2025-04-23 22:49:25,449 [DEBUG] findfont: score(FontEntry(fname='/usr/share/fonts/truetype/liberation/LiberationSerif-Italic.ttf', name='Liberation Serif', style='italic', variant='normal', weight=400, stretch='normal', size='scalable')) = 11.05
+2025-04-23 22:49:25,449 [DEBUG] findfont: score(FontEntry(fname='/usr/share/fonts/truetype/liberation/LiberationSerif-Regular.ttf', name='Liberation Serif', style='normal', variant='normal', weight=400, stretch='normal', size='scalable')) = 10.05
+2025-04-23 22:49:25,450 [DEBUG] findfont: Matching sans\-serif:style=normal:variant=normal:weight=normal:stretch=normal:size=12.0 to DejaVu Sans ('/kaggle/working/Mastergoal-AlphaZero/myenv/lib/python3.10/site-packages/matplotlib/mpl-data/fonts/ttf/DejaVuSans.ttf') with score of 0.050000.
+2025-04-23 22:50:06,450 [INFO] PITTING AGAINST PREVIOUS VERSION

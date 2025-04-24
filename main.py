@@ -53,6 +53,8 @@ args = dotdict({
 
     'mctsBatchSize': 128,
     'cuda': True,
+    'resume_from_arena': True,  # Flag to resume from arena comparison (FALSE)
+    'resume_iteration': 1,       # The iteration to resume from (0)
 })
 
 def main():

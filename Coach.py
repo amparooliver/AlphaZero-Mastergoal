@@ -190,6 +190,42 @@ class Coach():
         if not self.skipFirstSelfPlay:
             self.loadPartialExamples()
 
+        # Starting iteration - if resuming from arena, we don't increment
+        starting_iter = self.args.starting_iteration
+    
+        # Handle resume from arena comparison if specified
+        if hasattr(self.args, 'resume_from_arena') and self.args.resume_from_arena:
+            iteration = self.args.resume_iteration
+            log.info(f'Resuming from arena comparison for iteration {iteration}')
+
+            # Load the training examples history for this iteration
+            examples_file = os.path.join(self.args.checkpoint, self.getCheckpointFile(iteration-1) + ".examples")
+            if os.path.exists(examples_file):
+                with open(examples_file, "rb") as f:
+                    self.trainExamplesHistory = Unpickler(f).load()
+                log.info(f'Loaded training examples from {examples_file}')
+                
+                # Load the temp model which was being evaluated
+                temp_model_file = os.path.join(self.args.checkpoint, 'temp.pth.tar')
+                if os.path.exists(temp_model_file):
+                    self.nnet.load_checkpoint(folder=self.args.checkpoint, filename='temp.pth.tar')
+                    log.info(f'Loaded temp model that was being evaluated')
+                else:
+                    log.warning("Temp model file not found, using latest checkpoint instead")
+                    
+                # Extract the examples for this iteration
+                trainExamples = []
+                for e in self.trainExamplesHistory:
+                    trainExamples.extend(e)
+                    
+                # Jump directly to the arena comparison
+                log.info("Jumping to arena comparison phase...")
+                self._perform_arena_comparison(trainExamples, iteration)
+                
+                # Continue with the next iteration
+                starting_iter = iteration + 1
+
+        # Main learning loop
         for i in range(self.args.starting_iteration, self.args.numIters + 1):
             # bookkeeping
             log.info(f'Starting Iter #{i} ...')
@@ -266,32 +302,40 @@ class Coach():
 
             # In AlphaGo Zero, the new player is accepted if it has a winrate of 55% against the previous version,
             # but in AlphaZero, there is just a single network continuously updated
+            # Arena comparison moved to a separate method
             if self.args.arenaCompare:
-                # training new network, keeping a copy of the old one
-                self.nnet.save_checkpoint(folder=self.args.checkpoint, filename='temp.pth.tar')
-                self.pnet.load_checkpoint(folder=self.args.checkpoint, filename='temp.pth.tar')
-                pmcts = MCTS(self.game, self.pnet, self.args)
-
-                self.nnet.train(trainExamples)
-                nmcts = MCTS(self.game, self.nnet, self.args)
-
-                log.info('PITTING AGAINST PREVIOUS VERSION')
-                arena = Arena(lambda x: np.argmax(pmcts.getActionProb(x, temp=0)),
-                            lambda x: np.argmax(nmcts.getActionProb(x, temp=0)), self.game)
-                pwins, nwins, draws = arena.playGames(self.args.arenaCompare)
-
-                log.info('NEW/PREV WINS : %d / %d ; DRAWS : %d' % (nwins, pwins, draws))
-                if pwins + nwins == 0 or float(nwins) / (pwins + nwins) < self.args.updateThreshold:
-                    log.info('REJECTING NEW MODEL')
-                    self.nnet.load_checkpoint(folder=self.args.checkpoint, filename='temp.pth.tar')
-                else:
-                    log.info('ACCEPTING NEW MODEL')
-                    self.nnet.save_checkpoint(folder=self.args.checkpoint, filename=self.getCheckpointFile(i))
-                    self.nnet.save_checkpoint(folder=self.args.checkpoint, filename='best.pth.tar')
+                self._perform_arena_comparison(trainExamples, i)
             else:
                 self.nnet.train(trainExamples)
                 log.info(f'SAVING CHECKPOINT: {self.getCheckpointFile(i)}')
                 self.nnet.save_checkpoint(folder=self.args.checkpoint, filename=self.getCheckpointFile(i))
+    
+    def _perform_arena_comparison(self, trainExamples, iteration):
+        """
+        Perform arena comparison between new and old model.
+        This is extracted to a separate method to support resuming from arena phase.
+        """
+        # training new network, keeping a copy of the old one
+        self.nnet.save_checkpoint(folder=self.args.checkpoint, filename='temp.pth.tar')
+        self.pnet.load_checkpoint(folder=self.args.checkpoint, filename='temp.pth.tar')
+        pmcts = MCTS(self.game, self.pnet, self.args)
+
+        self.nnet.train(trainExamples)
+        nmcts = MCTS(self.game, self.nnet, self.args)
+
+        log.info('PITTING AGAINST PREVIOUS VERSION')
+        arena = Arena(lambda x: np.argmax(pmcts.getActionProb(x, temp=0)),
+                    lambda x: np.argmax(nmcts.getActionProb(x, temp=0)), self.game)
+        pwins, nwins, draws = arena.playGames(self.args.arenaCompare)
+
+        log.info('NEW/PREV WINS : %d / %d ; DRAWS : %d' % (nwins, pwins, draws))
+        if pwins + nwins == 0 or float(nwins) / (pwins + nwins) < self.args.updateThreshold:
+            log.info('REJECTING NEW MODEL')
+            self.nnet.load_checkpoint(folder=self.args.checkpoint, filename='temp.pth.tar')
+        else:
+            log.info('ACCEPTING NEW MODEL')
+            self.nnet.save_checkpoint(folder=self.args.checkpoint, filename=self.getCheckpointFile(iteration))
+            self.nnet.save_checkpoint(folder=self.args.checkpoint, filename='best.pth.tar')
 
     def cleanupPartialFiles(self, iteration):
         """Remove all partial files for the completed iteration"""

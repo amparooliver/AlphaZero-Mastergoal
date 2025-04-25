@@ -30,7 +30,7 @@ log = logging.getLogger(__name__)
 coloredlogs.install(level='DEBUG')  # Change this to DEBUG to see more info. #OR INFO
 
 args = dotdict({
-    'numIters': 1,
+    'numIters': 2,
     'numEps': 100,              # Number of complete self-play games to simulate during a new iteration.
     'saveFrequency': 20,        # Save examples every X episodes
     'tempThreshold': 30,        #
@@ -40,21 +40,17 @@ args = dotdict({
     'arenaCompare': 20,
     'cpuct': 2,
 
-    'checkpoint': './checkpoints/',
-    'load_model': False,
     'load_folder_file': ('./checkpoints', 'checkpoint_0.pth.tar'),
-    'starting_iteration': 1,
     'checkpoint': './new/',
     'load_model': False,
-    'load_folder_file': ('./13_03', 'checkpoint_1.pth.tar'),
-    'starting_iteration': 1,
+    'starting_iteration': 2,
     'numItersForTrainExamplesHistory': 100,
     'verbose': True,
 
     'mctsBatchSize': 128,
     'cuda': True,
-    'resume_from_arena': True,  # Flag to resume from arena comparison (FALSE)
-    'resume_iteration': 1,       # The iteration to resume from (0)
+    'resume_from_arena': False,  # Flag to resume from arena comparison (FALSE)
+    'resume_iteration': 2,       # The iteration to resume from (0)
 })
 
 def main():
